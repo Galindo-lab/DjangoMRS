@@ -25,3 +25,16 @@ def index(request: any) -> HttpResponse:
         request=request,
         template_name='index.html'
     )
+
+
+def login(request :any) -> HttpResponse:
+    """_summary_
+
+    Args:
+        request (any): _description_
+
+    Returns:
+        HttpResponse: _description_
+    """
+
+    
