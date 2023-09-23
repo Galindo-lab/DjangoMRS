@@ -11,10 +11,17 @@ from django.shortcuts import get_list_or_404
 from django.shortcuts import get_object_or_404
 
 
-def index(request):
+def index(request: any) -> HttpResponse:
+    """_summary_
+
+    Args:
+        request (any): _description_
+
+    Returns:
+        HttpResponse: _description_
+    """
+    
     return render(
         request=request,
         template_name='index.html'
     )
-
-
