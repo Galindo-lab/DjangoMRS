@@ -10,7 +10,9 @@ from django.shortcuts import redirect
 from django.shortcuts import get_list_or_404
 from django.shortcuts import get_object_or_404
 
-from . forms import UserLoginForm
+from django.views import View
+
+
 
 def index(request: any) -> HttpResponse:
     """_summary_
@@ -21,23 +23,36 @@ def index(request: any) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-    
+
     return render(
         request=request,
         template_name='index.html'
     )
 
 
-def login(request :any) -> HttpResponse:
-    """_summary_
+# class Login(View):
+#     template_name = 'login.html'
 
-    Args:
-        request (any): _description_
+#     def get(self, request, *args, **kwargs) -> HttpResponse:
+#         print("a")
+#         return render(request, self.template_name, {
+#             'form': UserLoginForm()
+#         })
 
-    Returns:
-        HttpResponse: _description_
-    """
-    return render(request, 'login.html', {
-       'form': UserLoginForm()
-    })
-    
+#     def post(self, request, *args, **kwargs) -> HttpResponse:
+
+#         print(request.user)
+
+#         form = UserLoginForm(request.POST)
+
+#         if form.is_valid():
+#             print('c')
+#             return HttpResponseRedirect('index')
+        
+#         # mostrar los errores en el form
+#         print('d')
+#         return render(request, self.template_name, {
+#             'form': form
+#         })
+
+        

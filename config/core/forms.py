@@ -15,7 +15,7 @@ class UserLoginForm(AuthenticationForm):
     """
 
     username = forms.CharField(
-        label="",
+        #label="",
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -25,7 +25,7 @@ class UserLoginForm(AuthenticationForm):
     )
 
     password = forms.CharField(
-        label="",
+        #label="",
         widget=forms.TextInput(attrs={
             'type': 'password',
             'class': 'form-control',
