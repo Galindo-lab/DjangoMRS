@@ -5,7 +5,7 @@
     <!-- border bg-light -->
 
     <form method="post" class="row d-flex justify-content-center">
-      <label class="h2 my-4 text-center" for="">Iniciar Sesión</label>
+      <label class="h2 my-4 text-center" for="">Ingresar a DMRS</label>
 
       {% if form.errors %}
         <div class="alert alert-danger" role="alert">
@@ -13,7 +13,7 @@
         </div>
       {% endif %}
 
-      <div class="row d-flex py-4 gap-4">
+      <div class="row d-flex py-4 gap-4 border-top">
         {% csrf_token %}
 
         <div class="form-group">
@@ -27,7 +27,9 @@
         </div>
       </div>
 
-      <div class="col d-flex mt-4 gap-2 ">
+      
+
+      <div class="col d-flex mt-3 gap-2 ">
         <a class="w-50 btn btn-outline-primary" href="{% url 'login' %}">Abrir monitor</a>
         <button class="w-50 btn btn-primary " type="submit">Iniciar Sesión</button>
       </div>
