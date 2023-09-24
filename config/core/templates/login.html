@@ -1,7 +1,30 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-  <div class="container">
-    <div class="row d-flex justify-content-center">Hola</div>
+  <div class="col-lg-4 px-3 mt-5">
+    <!--border bg-light -->
+
+    <form class="row d-flex justify-content-center">
+      <label class="h5 my-4 text-center" for="">Iniciar Sesión</label>
+
+
+
+      {% csrf_token %}
+
+      <div class="row d-flex py-4 gap-5">
+        {{ form }}
+      </div>
+
+      {% if form.errors %}
+        <p>Usuario o contraseña invalidos</p>
+      {% endif %}
+
+      
+
+      <div class="col d-flex pt-4">
+        <a class="w-50 btn btn-link" href="{% url 'login' %}">Abrir monitor</a>
+        <input class="btn btn-primary w-50" type="submit" />
+      </div>
+    </form>
   </div>
 {% endblock %}

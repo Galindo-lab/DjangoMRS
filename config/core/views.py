@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.shortcuts import get_list_or_404
 from django.shortcuts import get_object_or_404
 
+from . forms import UserLoginForm
 
 def index(request: any) -> HttpResponse:
     """_summary_
@@ -36,5 +37,7 @@ def login(request :any) -> HttpResponse:
     Returns:
         HttpResponse: _description_
     """
-
+    return render(request, 'login.html', {
+       'form': UserLoginForm()
+    })
     
