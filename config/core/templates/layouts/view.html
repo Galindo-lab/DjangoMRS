@@ -3,17 +3,23 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <!-- Creado por Luis Eduardo Galindo Amaya, Julio del 2023 -->
+    <!--  
+        Creado por Luis Eduardo Galindo Amaya, Julio del 2023
+      -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet" />
 
     {% block headerExtra %}
       <title>Medical Report</title>
     {% endblock %}
   </head>
-  {% block content %}
-    Hola mundo
-  {% endblock %}
+  <body class="bg-white">
+    <div class="d-flex justify-content-center">
+      {% block content %}
+        Hola mundo
+      {% endblock %}
+    </div>
+  </body>
 </html>
