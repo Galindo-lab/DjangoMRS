@@ -3,19 +3,17 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <!-- 
+    <!--  
         Creado por Luis Eduardo Galindo Amaya, Julio del 2023
-     -->
+      -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Medical Report</title>
+    
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet" />
 
-    {% comment %}boostrap{% endcomment %}
-     {% comment %}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
-    {% endcomment %}
-
-    <link href="{% static 'bootstrap.css' %}" rel="stylesheet" >
+    {% block headerExtra %}
+      <title>Medical Report</title>
+    {% endblock %}
   </head>
   <body class="bg-white">
     <div class="d-flex justify-content-center m-1">

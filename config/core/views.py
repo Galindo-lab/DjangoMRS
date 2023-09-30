@@ -20,6 +20,12 @@ def index(request: any) -> HttpResponse:
     )
 
 
+def monitor(request: any) -> HttpResponse:
+    return render(
+        request=request,
+        template_name='monitor.html'
+    )
+
 # class Login(View):
 #     template_name = 'login.html'
 
@@ -38,11 +44,9 @@ def index(request: any) -> HttpResponse:
 #         if form.is_valid():
 #             print('c')
 #             return HttpResponseRedirect('index')
-        
+
 #         # mostrar los errores en el form
 #         print('d')
 #         return render(request, self.template_name, {
 #             'form': form
 #         })
-
-        
