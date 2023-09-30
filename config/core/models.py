@@ -1,15 +1,32 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
 
-# Create your models here.
+from django.contrib.auth.models import AbstractUser
+
+
+class TestUser(AbstractUser):
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        DOCTOR = "DOCTOR", "Doctor"
+        ADMINISTRATOR = "ADMINISTRATOR", "Administrator"
+        RECEPTIONIST = "RECEPTIONIST", "Receptionist"
+
+    base_role = Role.ADMIN
+
+    role = models.CharField(
+        max_length=50,
+        choices=Role.choices
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.role = self.base_role
+            return super().save(*args, **kwargs)
 
 
 class Doctor(models.Model):
     """Doctores que atienden las clinicas
 
-    Args:
-        models (_type_): _description_
+    Cada doctor tiene un usuario para ingresar al sistema
     """
 
 
@@ -29,15 +46,7 @@ class Clinic(models.Model):
     """
 
 
-class PatientTurn(models.Model):
-    """Turno del pasiente en la fila
-
-    Args:
-        models (_type_): _description_
-    """
-
-
-class PatientData(models.Model):
+class Patient(models.Model):
     """Informacion del paciente, copiado diractamente de synthea
 
     Args:
@@ -69,4 +78,20 @@ class PatientData(models.Model):
         healthcare_expenses
         healthcare_coverage
         income
+    """
+
+
+class Turn(models.Model):
+    """Turno del pasiente en la fila
+
+    Args:
+        models (_type_): _description_
+    """
+
+
+class Diagnostics(models.Model):
+    """Diagnosticos del pasiente
+
+    Args:
+        models (_type_): _description_
     """
