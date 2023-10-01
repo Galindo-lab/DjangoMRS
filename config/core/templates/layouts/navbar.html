@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <!-- Creado por Luis Eduardo Galindo Amaya, Julio del 2023 -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet" />
+
+    {% block headerExtra %}
+      <title>Medical Report</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <nav class="navbar bg-primary navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="{% static 'img/imss_blanco.png' %}" alt="" height="24" class="d-inline-block align-text-top" />
+          DMRS
+        </a>
+
+        <div class="my-2 my-lg-0">
+
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a href="#" class="nav-link">Cerrar sesión</a>
+            </li>
+          </ul>
+
+          
+        </div>
+      </div>
+    </nav>
+
+    {% block content %}
+      Hola mundo
+    {% endblock %}
+  </body>
+</html>

@@ -22,5 +22,10 @@ urlpatterns = [
         route='monitor/',
         name='monitor',
         view=views.monitor
+    ),
+    path(
+        route='clinic/',
+        name='clinic',
+        view=views.clinic
     )
 ]
