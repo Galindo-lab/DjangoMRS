@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link href="{% static 'bootstrap.css' %}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
 
     {% block headerExtra %}
       <title>Medical Report</title>
@@ -16,7 +18,7 @@
 
   <body>
     <nav class="navbar bg-primary navbar-dark">
-      <div class="container">
+      <div class="container-lg">
         <a class="navbar-brand" href="#">
           <img src="{% static 'img/imss_blanco.png' %}" alt="" height="24" class="d-inline-block align-text-top" />
           DMRS
@@ -29,8 +31,6 @@
               <a href="#" class="nav-link">Cerrar sesión</a>
             </li>
           </ul>
-
-          
         </div>
       </div>
     </nav>

@@ -29,7 +29,7 @@ def monitor(request: any) -> HttpResponse:
 def clinic(request: any) -> HttpResponse:
     return render(
         request=request,
-        template_name='clinic.html'
+        template_name='doctor/clinic.html'
     )
 
 # class Login(View):
