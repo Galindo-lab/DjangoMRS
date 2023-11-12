@@ -4,6 +4,9 @@ from django.http import HttpResponseNotFound
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+
 from django.contrib.auth.models import User
 
 from django.shortcuts import render
@@ -33,14 +36,18 @@ def login_redirect(request: any) -> HttpResponse:
             return HttpResponseRedirect('/clinic')
         case HospitalUser.Role.RECEPTIONIST:
             return HttpResponseRedirect('/reception')
-
         case _:
             return HttpResponseNotFound("No tienes permisos")
 
 
-@method_decorator(login_required, name='dispatch')
-class Reception(View):
+class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = '/login/'
     template_name = 'reception/main.html'
+    view_role = HospitalUser.Role.RECEPTIONIST
+
+    def test_func(self) -> bool:
+        """Revisa si el usuario tiene el rol para la vista"""
+        return self.request.user.role == self.view_role
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
         return render(request, self.template_name)
