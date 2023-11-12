@@ -8,17 +8,22 @@ from .views import Reception
 
 urlpatterns = [
     path(
-        route='',
-        name='index',
-        view=views.index
-    ),
-    path(
         route='login/',
         name='login',
         view=LoginView.as_view(
             template_name='login.html',
             authentication_form=UserLoginForm
         )
+    ),
+    path(
+        route='logout/',
+        name='logout',
+        view=LogoutView.as_view()
+    ),
+    path(
+        route='',
+        name='index',
+        view=views.index
     ),
     path(
         route='loginRedirect/',
