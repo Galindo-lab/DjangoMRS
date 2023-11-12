@@ -31,6 +31,17 @@ def clinic(request: any) -> HttpResponse:
         request=request,
         template_name='doctor/clinic.html'
     )
+def Dashboard(request: any) -> HttpResponse:
+    return render(
+        request=request,
+        template_name='Administrador/Dashboard.html'
+    )
+
+def Recepcion(request: any) -> HttpResponse:
+    return render(
+        request=request,
+        template_name='Recepcionista/Recepcion.html'
+    )
 
 # class Login(View):
 #     template_name = 'login.html'

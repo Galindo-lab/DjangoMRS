@@ -27,5 +27,15 @@ urlpatterns = [
         route='clinic/',
         name='clinic',
         view=views.clinic
+    ),
+    path(
+        route='Dashboard/',
+        name='Dashboard',
+        view=views.Dashboard
+    ),
+    path(
+        route='Recepcion/',
+        name='Recepcion',
+        view=views.Recepcion
     )
 ]
