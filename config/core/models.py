@@ -2,6 +2,11 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractUser
 
+from datetime import datetime
+
+
+
+
 
 class HospitalUser(AbstractUser):
     """Usuario del sistema
@@ -21,10 +26,6 @@ class HospitalUser(AbstractUser):
         null=False,
         default=Role.NONE
     )
-
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         return super().save(*args, **kwargs)
 
 
 class Doctor(models.Model):
@@ -57,37 +58,46 @@ class Patient(models.Model):
         models (_type_): _description_
         id
         birthdate
-        deathdate
-        ssn
-        drivers
-        passport
-        prefix
         first
         last
-        suffix
-        maiden
-        marital
-        race
-        ethnicity
         gender
-        birthplace
-        address
-        city
-        state
-        county
-        fips
-        zip
-        lat
-        lon
-        healthcare_expenses
-        healthcare_coverage
-        income
     """
+
+    class Gender(models.TextChoices):
+        OTHER = 'O', "OTHER"
+        MALE = 'M', "MALE"
+        FEMALE = 'F', "FEMLAE"
+
+    name = models.CharField(
+        max_length=250
+    )
+
+    paterno = models.CharField(
+        max_length=250
+    )
+
+    materno = models.CharField(
+        max_length=250,
+        blank=True
+    ) 
+
+    birthdate = models.DateField(
+        default=datetime.now, 
+        blank=True
+    )
+
+    gender = models.CharField(
+        max_length=1,
+        choices=Gender.choices,
+        null=False,
+        blank=False,
+        default=Gender.OTHER
+    )
 
 
 
 class Turn(models.Model):
-    """Turno del pasiente en la fila
+    """Turno del pasiente en la filaPadtien
 
     Args:
         models (_type_): _description_

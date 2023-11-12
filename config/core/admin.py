@@ -5,3 +5,4 @@ from .models import HospitalUser, Doctor, MedicalUnit, Clinic, Patient
 # Register your models here.
 
 admin.site.register(HospitalUser)
+admin.site.register(Patient)

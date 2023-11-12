@@ -27,3 +27,6 @@ class UserLoginForm(AuthenticationForm):
             'placeholder': 'Contraseña'
         })
     )
+
+# class ReceptionForm(forms.ModelForm):
+#     class Meta:
