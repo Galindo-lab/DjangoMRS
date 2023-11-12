@@ -1,26 +1,34 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import Group
+
+from datetime import datetime
 
 
-class TestUser(AbstractUser):
+# Group.objects.create(name='Doctor')
+# Group.objects.create(name='Administrator')
+# Group.objects.create(name='Receptionist')
+
+
+class HospitalUser(AbstractUser):
+    """Usuario del sistema
+
+    registro de usuarios del sistema"""
+
     class Role(models.TextChoices):
-        ADMIN = "ADMIN", "Admin"
+        NONE = "NONE", "None"
         DOCTOR = "DOCTOR", "Doctor"
         ADMINISTRATOR = "ADMINISTRATOR", "Administrator"
         RECEPTIONIST = "RECEPTIONIST", "Receptionist"
 
-    base_role = Role.ADMIN
-
     role = models.CharField(
-        max_length=50,
-        choices=Role.choices
+        max_length = 50,
+        choices = Role.choices,
+        blank = False,
+        null = False,
+        default = Role.NONE
     )
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.role = self.base_role
-            return super().save(*args, **kwargs)
 
 
 class Doctor(models.Model):
@@ -53,41 +61,60 @@ class Patient(models.Model):
         models (_type_): _description_
         id
         birthdate
-        deathdate
-        ssn
-        drivers
-        passport
-        prefix
         first
         last
-        suffix
-        maiden
-        marital
-        race
-        ethnicity
         gender
-        birthplace
-        address
-        city
-        state
-        county
-        fips
-        zip
-        lat
-        lon
-        healthcare_expenses
-        healthcare_coverage
-        income
     """
+
+    class Gender(models.TextChoices):
+        OTHER = 'O', "OTHER"
+        MALE = 'M', "MALE"
+        FEMALE = 'F', "FEMLAE"
+
+    name = models.CharField(
+        max_length=250
+    )
+
+    paterno = models.CharField(
+        max_length=250
+    )
+
+    materno = models.CharField(
+        max_length=250,
+        blank=True
+    ) 
+
+    birthdate = models.DateField(
+        default=datetime.now, 
+        blank=True
+    )
+
+    gender = models.CharField(
+        max_length=1,
+        choices=Gender.choices,
+        null=False,
+        blank=False,
+        default=Gender.OTHER
+    )
+
 
 
 class Turn(models.Model):
-    """Turno del pasiente en la fila
+    """Turno del pasiente en la filaPadtien
 
     Args:
         models (_type_): _description_
     """
+    def emit(self, id):
+        """Emitir turno
 
+        Returns:
+            _type_: _description_
+        """
+        pass
+
+
+        
 
 class Diagnostics(models.Model):
     """Diagnosticos del pasiente
