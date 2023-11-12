@@ -19,6 +19,11 @@ urlpatterns = [
         )
     ),
     path(
+        route='loginRedirect/',
+        name='loginRedirect',
+        view=views.login_redirect
+    ),
+    path(
         route='monitor/',
         name='monitor',
         view=views.monitor

@@ -3,24 +3,28 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class TestUser(AbstractUser):
+class HospitalUser(AbstractUser):
+    """Usuario del sistema
+
+    registro de usuarios del sistema"""
+
     class Role(models.TextChoices):
-        ADMIN = "ADMIN", "Admin"
+        NONE = "NONE", "None"
         DOCTOR = "DOCTOR", "Doctor"
         ADMINISTRATOR = "ADMINISTRATOR", "Administrator"
         RECEPTIONIST = "RECEPTIONIST", "Receptionist"
 
-    base_role = Role.ADMIN
-
     role = models.CharField(
         max_length=50,
-        choices=Role.choices
+        choices=Role.choices,
+        blank=False,
+        null=False,
+        default=Role.NONE
     )
 
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.role = self.base_role
-            return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.pk:
+    #         return super().save(*args, **kwargs)
 
 
 class Doctor(models.Model):
@@ -81,13 +85,23 @@ class Patient(models.Model):
     """
 
 
+
 class Turn(models.Model):
     """Turno del pasiente en la fila
 
     Args:
         models (_type_): _description_
     """
+    def emit(self, id):
+        """Emitir turno
 
+        Returns:
+            _type_: _description_
+        """
+        pass
+
+
+        
 
 class Diagnostics(models.Model):
     """Diagnosticos del pasiente

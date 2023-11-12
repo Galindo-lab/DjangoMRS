@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 
 from django.views import View
 
+from .models import HospitalUser
 
 def index(request: any) -> HttpResponse:
     return render(
@@ -19,13 +20,32 @@ def index(request: any) -> HttpResponse:
         template_name='index.html'
     )
 
+@login_required
+def login_redirect(request: any) -> HttpResponse:
+    match request.user.role:
+        case HospitalUser.Role.ADMINISTRATOR:
+            return HttpResponse("Tu eres admin")
+        case HospitalUser.Role.DOCTOR:  
+            return HttpResponseRedirect('/clinic')
+        case HospitalUser.Role.RECEPTIONIST:
+            return HttpResponse("Tu eres recepcionista")
+        
+        case _:
+            return HttpResponseNotFound("No tienes permisos")
 
+@login_required
+def reception(request: any) -> HttpResponse:
+    pass
+
+
+@login_required
 def monitor(request: any) -> HttpResponse:
     return render(
         request=request,
         template_name='monitor.html'
     )
 
+@login_required
 def clinic(request: any) -> HttpResponse:
     return render(
         request=request,

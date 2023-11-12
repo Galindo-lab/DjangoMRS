@@ -123,7 +123,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "core.TestUser"
+AUTH_USER_MODEL = "core.HospitalUser"
 
-LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "loginRedirect"
 LOGOUT_REDIRECT_URL = "index"
