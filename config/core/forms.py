@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
+from . models import Patient, Doctor, Clinic, HospitalUser
 
 class UserLoginForm(AuthenticationForm):
     """_summary_
@@ -30,3 +31,5 @@ class UserLoginForm(AuthenticationForm):
 
 # class ReceptionForm(forms.ModelForm):
 #     class Meta:
+#         model = Patient
+#         # fields = []

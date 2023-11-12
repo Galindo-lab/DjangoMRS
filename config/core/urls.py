@@ -2,7 +2,9 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
 from . forms import UserLoginForm
+
 from . import views
+from .views import Reception
 
 urlpatterns = [
     path(
@@ -32,5 +34,10 @@ urlpatterns = [
         route='clinic/',
         name='clinic',
         view=views.clinic
-    )
+    ),
+    path(
+        route='reception/',
+        name='reception',
+        view=Reception.as_view()
+    ),
 ]

@@ -1,5 +1,13 @@
 <!-- FILEPATH: /home/galindo/Documentos/GitHub/DjangoMRS/config/core/templates/recepcion/main.html -->
 
+
+{% comment %} {% extends '../layouts/navbar.html' %}
+{% block content %}
+
+{{ form }}
+
+{% endblock %} {% endcomment %}
+
 <form method="POST">
   {% csrf_token %}
   <label for="nombre">Nombre:</label>
@@ -21,4 +29,4 @@
   </select><br>
 
   <button type="submit">Enviar</button>
-</form>
+</form> 

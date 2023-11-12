@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import HttpResponseNotFound
 
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
@@ -10,9 +11,11 @@ from django.shortcuts import redirect
 from django.shortcuts import get_list_or_404
 from django.shortcuts import get_object_or_404
 
+from django.views.generic import TemplateView
 from django.views import View
 
 from .models import HospitalUser
+
 
 def index(request: any) -> HttpResponse:
     return render(
@@ -20,22 +23,30 @@ def index(request: any) -> HttpResponse:
         template_name='index.html'
     )
 
+
 @login_required
 def login_redirect(request: any) -> HttpResponse:
     match request.user.role:
         case HospitalUser.Role.ADMINISTRATOR:
             return HttpResponse("Tu eres admin")
-        case HospitalUser.Role.DOCTOR:  
+        case HospitalUser.Role.DOCTOR:
             return HttpResponseRedirect('/clinic')
         case HospitalUser.Role.RECEPTIONIST:
-            return HttpResponse("Tu eres recepcionista")
-        
+            return HttpResponseRedirect('/reception')
+
         case _:
             return HttpResponseNotFound("No tienes permisos")
 
-@login_required
-def reception(request: any) -> HttpResponse:
-    pass
+
+@method_decorator(login_required, name='dispatch')
+class Reception(View):
+    template_name = 'reception/main.html'
+
+    def get(self, request, *args, **kwargs) -> HttpResponse:
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs) -> HttpResponse:
+        return render(request, self.template_name)
 
 
 @login_required
@@ -44,6 +55,7 @@ def monitor(request: any) -> HttpResponse:
         request=request,
         template_name='monitor.html'
     )
+
 
 @login_required
 def clinic(request: any) -> HttpResponse:
