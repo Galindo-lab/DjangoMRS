@@ -42,7 +42,7 @@ def login_redirect(request: any) -> HttpResponse:
 
 class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = '/login/'
-    template_name = 'reception/main.html'
+    template_name = 'Recepcionista/Recepcion.html'
     view_role = HospitalUser.Role.RECEPTIONIST
 
     def test_func(self) -> bool:
@@ -63,46 +63,16 @@ def monitor(request: any) -> HttpResponse:
         template_name='monitor.html'
     )
 
-
 @login_required
 def clinic(request: any) -> HttpResponse:
     return render(
         request=request,
         template_name='doctor/clinic.html'
     )
+
+@login_required
 def Dashboard(request: any) -> HttpResponse:
     return render(
         request=request,
         template_name='Administrador/Dashboard.html'
     )
-
-def Recepcion(request: any) -> HttpResponse:
-    return render(
-        request=request,
-        template_name='Recepcionista/Recepcion.html'
-    )
-
-# class Login(View):
-#     template_name = 'login.html'
-
-#     def get(self, request, *args, **kwargs) -> HttpResponse:
-#         print("a")
-#         return render(request, self.template_name, {
-#             'form': UserLoginForm()
-#         })
-
-#     def post(self, request, *args, **kwargs) -> HttpResponse:
-
-#         print(request.user)
-
-#         form = UserLoginForm(request.POST)
-
-#         if form.is_valid():
-#             print('c')
-#             return HttpResponseRedirect('index')
-
-#         # mostrar los errores en el form
-#         print('d')
-#         return render(request, self.template_name, {
-#             'form': form
-#         })
