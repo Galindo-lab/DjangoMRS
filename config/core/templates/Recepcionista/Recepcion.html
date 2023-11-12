@@ -1,0 +1,45 @@
+{% extends '../layouts/navbar.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-center vh-100 mt-4">
+    <div class="col-md-6 overflow-auto px-5" id="stdout">
+      <label class="h6 mb-3">Información del paciente</label>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="inputGroup-sizing-sm">Nombre(es)</span>
+        <input type="text" class="form-control" />
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Paterno</span>
+        <input type="text" class="form-control" placeholder="Username" aria-label="Username" />
+        <span class="input-group-text">Materno</span>
+        <input type text="text" class="form-control" aria-label="Server" />
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text">Fecha de nacimiento</span>
+        <input type="date" class="form-control" placeholder="Username" aria-label="Username" />
+        <span class="input-group-text">Sexo</span>
+        <input type="text" class="form-control" aria-label="Server" />
+      </div>
+
+      <div class="input-group mb-3">
+        <select class="form-select form-select-lg" aria-label="Unidad Medica">
+          <option selected disabled>Unidad Medica</option>
+          <option>Minimo Urgencias</option>
+          <option>Paciente normal</option>
+        </select>
+      </div>
+
+      <div class="col d-flex mt-3 gap-2 ">
+        <button class="w-50 btn btn-outline-primary" type="submit">
+          Cancelar
+        </button>
+        <button class="w-50 btn btn-primary " type="submit">
+          Registrar
+        </button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
