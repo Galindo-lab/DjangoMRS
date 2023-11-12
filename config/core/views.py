@@ -42,7 +42,7 @@ def login_redirect(request: any) -> HttpResponse:
 
 class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = '/login/'
-    template_name = 'Recepcionista/Recepcion.html'
+    template_name = 'reception/recepcion.html'
     view_role = HospitalUser.Role.RECEPTIONIST
 
     def test_func(self) -> bool:
