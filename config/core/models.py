@@ -1,11 +1,14 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import Group
 
 from datetime import datetime
 
 
-
+# Group.objects.create(name='Doctor')
+# Group.objects.create(name='Administrator')
+# Group.objects.create(name='Receptionist')
 
 
 class HospitalUser(AbstractUser):
@@ -20,11 +23,11 @@ class HospitalUser(AbstractUser):
         RECEPTIONIST = "RECEPTIONIST", "Receptionist"
 
     role = models.CharField(
-        max_length=50,
-        choices=Role.choices,
-        blank=False,
-        null=False,
-        default=Role.NONE
+        max_length = 50,
+        choices = Role.choices,
+        blank = False,
+        null = False,
+        default = Role.NONE
     )
 
 
