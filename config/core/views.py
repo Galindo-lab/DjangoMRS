@@ -5,9 +5,9 @@ from django.http import HttpResponseNotFound
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 
-from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from django.shortcuts import render
 from django.shortcuts import redirect
