@@ -17,8 +17,11 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from django.views import View
 
-from .forms import ReceptionForm
 from .models import HospitalUser
+from .models import Patient
+from .models import Turn
+
+from .forms import ReceptionForm
 
 
 def index(request: any) -> HttpResponse:
@@ -59,7 +62,24 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
         """Recibe el formulario"""
-        return HttpResponse(request)
+        patient_form = ReceptionForm(request.POST)
+
+        if not patient_form.is_valid():
+            return HttpResponseNotFound("Formulario invalido")
+
+        if not patient_form.found():
+            return HttpResponseNotFound("Paciente no encontrado")
+        
+        # TODO mostrar lista de opciones 
+        patient = patient_form.patient()[0]
+
+        if patient.has_turn():
+            return HttpResponseNotFound("Paciente ya tiene turno")
+            
+        turn = Turn(patient=patient)
+        turn.save()
+
+        return HttpResponse("valido")
 
 
 @login_required
@@ -69,12 +89,14 @@ def monitor(request: any) -> HttpResponse:
         template_name='monitor.html'
     )
 
+
 @login_required
 def clinic(request: any) -> HttpResponse:
     return render(
         request=request,
         template_name='doctor/clinic.html'
     )
+
 
 @login_required
 def Dashboard(request: any) -> HttpResponse:

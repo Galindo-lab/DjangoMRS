@@ -36,8 +36,21 @@ class ReceptionForm(forms.ModelForm):
         model = Patient
         fields = [
             "birthdate",
-            "gender", 
+            "gender",
             "name",
             "paterno",
             "materno"
         ]
+
+    def patient(self) -> list:
+        """Regresa una lista de pacientes con los mismos datos"""
+        return Patient.objects.filter(
+            name=self.cleaned_data['name'],
+            paterno=self.cleaned_data['paterno'],
+            materno=self.cleaned_data['materno'],
+            birthdate=self.cleaned_data['birthdate'],
+        )
+
+    def found(self) -> bool:
+        """Regresa si el paciente ya existe en la base de datos"""
+        return self.patient().exists()
