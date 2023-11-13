@@ -30,6 +30,7 @@ def index(request: any) -> HttpResponse:
 
 @login_required
 def login_redirect(request: any) -> HttpResponse:
+    """Redirige al usuario a su vista dependiendo del rol"""
     match request.user.role:
         case HospitalUser.Role.ADMINISTRATOR:
             return HttpResponse("Tu eres admin")
@@ -51,11 +52,13 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.role == self.view_role
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
+        """Muestra el formulario"""
         return render(request, self.template_name, {
             "form": ReceptionForm()
         })
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
+        """Recibe el formulario"""
         return HttpResponse(request)
 
 
