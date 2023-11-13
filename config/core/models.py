@@ -69,7 +69,7 @@ class Patient(models.Model):
     class Gender(models.TextChoices):
         OTHER = 'O', "OTHER"
         MALE = 'M', "MALE"
-        FEMALE = 'F', "FEMLAE"
+        FEMALE = 'F', "FEMALE"
 
     name = models.CharField(
         max_length=250
