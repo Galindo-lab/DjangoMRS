@@ -20,6 +20,7 @@ from django.views import View
 from .models import HospitalUser
 from .models import Patient
 from .models import Turn
+from .models import MedicalUnit
 
 from .forms import ReceptionForm
 
@@ -55,9 +56,10 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.role == self.view_role
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
-        """Muestra el formulario"""
+        """Muestra el formulario vacio"""
         return render(request, self.template_name, {
-            "form": ReceptionForm()
+            "form": ReceptionForm(),
+            "medical_units": MedicalUnit.objects.all(),
         })
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
@@ -69,13 +71,14 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
 
         if not patient_form.found():
             return HttpResponseNotFound("Paciente no encontrado")
-        
-        # TODO mostrar lista de opciones 
+
+        # TODO mostrar lista de opciones
         patient = patient_form.patient()[0]
 
         if patient.has_turn():
             return HttpResponseNotFound("Paciente ya tiene turno")
-            
+
+        # guardar el 
         turn = Turn(patient=patient)
         turn.save()
 

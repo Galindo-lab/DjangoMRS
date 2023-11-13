@@ -14,7 +14,8 @@ from datetime import datetime
 class HospitalUser(AbstractUser):
     """Usuario del sistema
 
-    registro de usuarios del sistema"""
+    registro de usuarios del sistema
+    """
 
     class Role(models.TextChoices):
         NONE = "NONE", "None"
@@ -45,6 +46,22 @@ class MedicalUnit(models.Model):
         models (_type_): _description_
     """
 
+    class Priority(models.IntegerChoices):
+        """Niveles de urgencia de la unidad medica"""
+        ALTO = 0, "Alto"
+        MEDIO = 1, "Medio"
+        BAJO = 2, "Bajo"
+
+    name = models.CharField(
+        max_length=250
+    )
+
+    priority = models.IntegerField(
+        choices=Priority.choices,
+        default=Priority.BAJO
+    )
+
+
 
 class Clinic(models.Model):
     """Clinica en la que se atienden los pacientes
@@ -67,9 +84,9 @@ class Patient(models.Model):
     """
 
     class Gender(models.TextChoices):
-        OTHER = 'O', "OTHER"
-        MALE = 'M', "MALE"
-        FEMALE = 'F', "FEMALE"
+        OTHER = 'O', "Indefinido"
+        MALE = 'M', "Masculino"
+        FEMALE = 'F', "Femenino"
 
     name = models.CharField(
         max_length=250

@@ -40,8 +40,15 @@
       <div class="input-group mb-3">
         <select class="form-select" aria-label="Unidad Medica">
           <option selected disabled>Unidad Medica</option>
-          <option>Urgencias</option>
-          <option>Paciente normal</option>
+
+          {% for unit in medical_units %}
+
+          <option> 
+            {{ unit.name }}
+          </option>
+
+          {% endfor %}
+
         </select>
       </div>
 
