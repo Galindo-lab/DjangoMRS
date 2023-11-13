@@ -97,6 +97,12 @@ class Patient(models.Model):
         default=Gender.OTHER
     )
 
+    def has_turn(self) -> bool:
+        """Regresa si el paciente tiene un turno"""
+        return Turn.objects.filter(
+            patient=self
+        )
+
 
 
 class Turn(models.Model):
@@ -104,7 +110,6 @@ class Turn(models.Model):
 
     patient = models.OneToOneField(
         to=Patient,
-        related_name='has_turns',
         on_delete=models.CASCADE
     )
 

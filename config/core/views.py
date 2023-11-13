@@ -69,18 +69,14 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
 
         if not patient_form.found():
             return HttpResponseNotFound("Paciente no encontrado")
+        
+        # TODO mostrar lista de opciones 
+        patient = patient_form.patient()[0]
 
-        patient = Patient.objects.filter(
-            name=patient_form.cleaned_data['name'],
-            paterno=patient_form.cleaned_data['paterno'],
-            materno=patient_form.cleaned_data['materno'],
-            birthdate=patient_form.cleaned_data['birthdate'],
-        )[0]
-
-        turn = Turn(
-            patient=patient
-        )
-
+        if patient.has_turn():
+            return HttpResponseNotFound("Paciente ya tiene turno")
+            
+        turn = Turn(patient=patient)
         turn.save()
 
         return HttpResponse("valido")
