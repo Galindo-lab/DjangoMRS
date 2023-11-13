@@ -1,33 +1,46 @@
 {% extends '../layouts/navbar.html' %}
 
+{% load widget_tweaks %}
+
 {% block content %}
-  <div class="d-flex justify-content-center vh-100 mt-4">
-    <div class="col-md-6 overflow-auto px-5" id="stdout">
+{% comment %} 
+  {{form}} {% endcomment %}
+
+  <form method="POST" class="d-flex justify-content-center vh-100 mt-4">
+    {% csrf_token %}
+
+    <div class="col-md-8 overflow-auto px-5" id="stdout">
       <label class="h6 mb-3">Información del paciente</label>
 
+      {% comment %} Nombre {% endcomment %}
       <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-sm">Nombre(es)</span>
-        <input type="text" class="form-control" />
+        {% render_field form.name class+="form-control" %}
       </div>
 
+      {% comment %} Apellidos {% endcomment %}
       <div class="input-group mb-3">
         <span class="input-group-text">Paterno</span>
-        <input type="text" class="form-control" placeholder="Username" aria-label="Username" />
+        {% render_field form.paterno class+="form-control" %}
+
         <span class="input-group-text">Materno</span>
-        <input type text="text" class="form-control" aria-label="Server" />
+        {% render_field form.materno class+="form-control" %}
       </div>
 
+      {% comment %} Fecha de nacimiento y sexo {% endcomment %}
       <div class="input-group mb-3">
         <span class="input-group-text">Fecha de nacimiento</span>
-        <input type="date" class="form-control" placeholder="Username" aria-label="Username" />
+        {% render_field form.birthdate type="date" class+="form-control" %}
+
         <span class="input-group-text">Sexo</span>
-        <input type="text" class="form-control" aria-label="Server" />
+        {% render_field form.gender class+="form-control" %}
       </div>
 
+      {% comment %} Tipo de urgencias {% endcomment %}
       <div class="input-group mb-3">
-        <select class="form-select form-select-lg" aria-label="Unidad Medica">
+        <select class="form-select" aria-label="Unidad Medica">
           <option selected disabled>Unidad Medica</option>
-          <option>Minimo Urgencias</option>
+          <option>Urgencias</option>
           <option>Paciente normal</option>
         </select>
       </div>
@@ -41,5 +54,5 @@
         </button>
       </div>
     </div>
-  </div>
+  </form>
 {% endblock %}

@@ -17,6 +17,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 from django.views import View
 
+from .forms import ReceptionForm
 from .models import HospitalUser
 
 
@@ -50,10 +51,12 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.request.user.role == self.view_role
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
-        return render(request, self.template_name)
+        return render(request, self.template_name, {
+            "form": ReceptionForm()
+        })
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
-        return render(request, self.template_name)
+        return HttpResponse(request)
 
 
 @login_required
