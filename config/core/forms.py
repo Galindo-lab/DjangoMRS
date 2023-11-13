@@ -36,8 +36,21 @@ class ReceptionForm(forms.ModelForm):
         model = Patient
         fields = [
             "birthdate",
-            "gender", 
+            "gender",
             "name",
             "paterno",
             "materno"
         ]
+
+    def patient(self):
+        pass
+
+    def found(self):
+        patient = Patient.objects.filter(
+            name=self.cleaned_data['name'],
+            paterno=self.cleaned_data['paterno'],
+            materno=self.cleaned_data['materno'],
+            birthdate=self.cleaned_data['birthdate'],
+        )
+
+        return patient.exists()

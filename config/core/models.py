@@ -100,19 +100,24 @@ class Patient(models.Model):
 
 
 class Turn(models.Model):
-    """Turno del pasiente en la filaPadtien
+    """Modelo de turno para el paciente"""
 
-    Args:
-        models (_type_): _description_
-    """
-    def emit(self, id):
-        """Emitir turno
+    patient = models.OneToOneField(
+        to=Patient,
+        related_name='has_turns',
+        on_delete=models.CASCADE
+    )
 
-        Returns:
-            _type_: _description_
-        """
-        pass
+    emited = models.DateTimeField(
+        default=datetime.now
+    )
 
+    # TODO falta la clinica
+    
+    def create(self, patient: Patient):
+        Turn.objects.create(
+            patient=patient
+        )
 
         
 
