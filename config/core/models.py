@@ -144,11 +144,11 @@ class Turn(models.Model):
 
     # TODO falta la clinica
     
-    def create(self, patient: Patient):
-        Turn.objects.create(
-            patient=patient
-        )
-
+    def next() -> 'Turn':
+        """Retorna el siguiente turno"""
+        return Turn.objects.order_by(
+            'emited'
+        ).first()
         
 
 class Diagnostics(models.Model):

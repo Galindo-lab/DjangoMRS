@@ -44,7 +44,7 @@ def login_redirect(request: any) -> HttpResponse:
         case HospitalUser.Role.RECEPTIONIST:
             return HttpResponseRedirect('/reception')
         case _:
-            return HttpResponseNotFound("No tienes permisos")
+            return HttpResponseNotFound(Turn.next())
 
 
 class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
