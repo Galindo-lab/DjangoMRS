@@ -38,21 +38,21 @@
 
       {% comment %} Tipo de urgencias {% endcomment %}
       <div class="input-group mb-3">
-        <select class="form-select" aria-label="Unidad Medica">
-          <option selected disabled>Unidad Medica</option>
 
+        <span class="input-group-text">Unidad medica</span>
+        {% render_field form.medical_unit list="units" class+="form-select" %}
+
+        <datalist id="units">
           {% for unit in medical_units %}
-
-          <option> 
+          <option value="{{ unit.name }}">
             {{ unit.name }}
           </option>
-
           {% endfor %}
+        </datalist>
 
-        </select>
       </div>
 
-      <div class="col d-flex mt-3 gap-2 ">
+      <div class="col d-flex mt-3 gap-2">
         <button class="w-50 btn btn-outline-primary" type="submit">
           Cancelar
         </button>

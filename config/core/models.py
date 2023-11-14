@@ -48,17 +48,18 @@ class MedicalUnit(models.Model):
 
     class Priority(models.IntegerChoices):
         """Niveles de urgencia de la unidad medica"""
-        ALTO = 0, "Alto"
-        MEDIO = 1, "Medio"
-        BAJO = 2, "Bajo"
+        HIGH = 0, "Alto"
+        MEDIUM = 1, "Medio"
+        LOW = 2, "Bajo"
 
     name = models.CharField(
-        max_length=250
+        max_length=250,
+        primary_key=True
     )
 
     priority = models.IntegerField(
         choices=Priority.choices,
-        default=Priority.BAJO
+        default=Priority.LOW
     )
 
 
@@ -132,6 +133,13 @@ class Turn(models.Model):
 
     emited = models.DateTimeField(
         default=datetime.now
+    )
+
+    medical_unit = models.ForeignKey(
+        to=MedicalUnit,
+        on_delete=models.CASCADE,
+        blank=True, 
+        null=True
     )
 
     # TODO falta la clinica

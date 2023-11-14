@@ -35,6 +35,7 @@ def index(request: any) -> HttpResponse:
 @login_required
 def login_redirect(request: any) -> HttpResponse:
     """Redirige al usuario a su vista dependiendo del rol"""
+
     match request.user.role:
         case HospitalUser.Role.ADMINISTRATOR:
             return HttpResponse("Tu eres admin")
@@ -53,10 +54,12 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def test_func(self) -> bool:
         """Revisa si el usuario tiene el rol para la vista"""
+
         return self.request.user.role == self.view_role
 
     def get(self, request, *args, **kwargs) -> HttpResponse:
         """Muestra el formulario vacio"""
+
         return render(request, self.template_name, {
             "form": ReceptionForm(),
             "medical_units": MedicalUnit.objects.all(),
@@ -64,22 +67,31 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
         """Recibe el formulario"""
+
         patient_form = ReceptionForm(request.POST)
 
         if not patient_form.is_valid():
             return HttpResponseNotFound("Formulario invalido")
-
-        if not patient_form.found():
-            return HttpResponseNotFound("Paciente no encontrado")
-
+        
         # TODO mostrar lista de opciones
         patient = patient_form.patient()[0]
+
+        if not patient.exists():
+            return HttpResponseNotFound("Paciente no encontrado")
+        
+        medical_unit = patient_form.unit()[0]
+
+        if not medical_unit.exists():
+            return HttpResponseNotFound("Unidad medica no encontrada")
 
         if patient.has_turn():
             return HttpResponseNotFound("Paciente ya tiene turno")
 
-        # guardar el 
-        turn = Turn(patient=patient)
+        turn = Turn(
+            patient = patient, 
+            medical_unit = medical_unit
+        )
+
         turn.save()
 
         return HttpResponse("valido")
