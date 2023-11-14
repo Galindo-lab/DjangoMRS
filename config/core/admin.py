@@ -7,3 +7,4 @@ admin.site.register(HospitalUser)
 
 admin.site.register(Patient)
 admin.site.register(Turn)
+admin.site.register(MedicalUnit)

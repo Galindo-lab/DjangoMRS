@@ -14,7 +14,8 @@ from datetime import datetime
 class HospitalUser(AbstractUser):
     """Usuario del sistema
 
-    registro de usuarios del sistema"""
+    registro de usuarios del sistema
+    """
 
     class Role(models.TextChoices):
         NONE = "NONE", "None"
@@ -45,6 +46,23 @@ class MedicalUnit(models.Model):
         models (_type_): _description_
     """
 
+    class Priority(models.IntegerChoices):
+        """Niveles de urgencia de la unidad medica"""
+        HIGH = 0, "Alto"
+        MEDIUM = 1, "Medio"
+        LOW = 2, "Bajo"
+
+    name = models.CharField(
+        max_length=250,
+        primary_key=True
+    )
+
+    priority = models.IntegerField(
+        choices=Priority.choices,
+        default=Priority.LOW
+    )
+
+
 
 class Clinic(models.Model):
     """Clinica en la que se atienden los pacientes
@@ -67,9 +85,9 @@ class Patient(models.Model):
     """
 
     class Gender(models.TextChoices):
-        OTHER = 'O', "OTHER"
-        MALE = 'M', "MALE"
-        FEMALE = 'F', "FEMALE"
+        OTHER = 'O', "Indefinido"
+        MALE = 'M', "Masculino"
+        FEMALE = 'F', "Femenino"
 
     name = models.CharField(
         max_length=250
@@ -115,6 +133,13 @@ class Turn(models.Model):
 
     emited = models.DateTimeField(
         default=datetime.now
+    )
+
+    medical_unit = models.ForeignKey(
+        to=MedicalUnit,
+        on_delete=models.CASCADE,
+        blank=True, 
+        null=True
     )
 
     # TODO falta la clinica

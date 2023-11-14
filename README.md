@@ -8,3 +8,7 @@ python config/manage.py makemigrations core
 python config/manage.py migrate
 ```
 
+## Crear unidades medicas
+```
+python config/manage.py createmedicalunits
+```
