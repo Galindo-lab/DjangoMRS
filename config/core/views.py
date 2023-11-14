@@ -47,7 +47,7 @@ def login_redirect(request: any) -> HttpResponse:
             return HttpResponseNotFound(Turn.next())
 
 
-class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
+class ReceptionView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = '/login/'
     template_name = 'reception/recepcion.html'
     view_role = HospitalUser.Role.RECEPTIONIST
@@ -105,13 +105,20 @@ def monitor(request: any) -> HttpResponse:
     )
 
 
-@login_required
-def clinic(request: any) -> HttpResponse:
-    return render(
-        request=request,
-        template_name='doctor/clinic.html'
-    )
+class ClinicView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'doctor/clinic.html'
 
+    def test_func(self) -> bool:
+        return self.request.user.role == HospitalUser.Role.DOCTOR
+
+    def get(self, request, *args, **kwargs) -> HttpResponse:
+        return render(request, self.template_name, {
+            "turns": Turn.objects.all()
+        })
+    
+    def post(self, request, *args, **kwargs) -> HttpResponse:
+        """Recibe el formulario"""
+        pass
 
 @login_required
 def Dashboard(request: any) -> HttpResponse:
