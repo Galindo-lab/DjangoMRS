@@ -4,7 +4,7 @@ from django.urls import path
 from . forms import UserLoginForm
 
 from . import views
-from .views import Reception
+from .views import ReceptionView, ClinicView
 
 urlpatterns = [
     path(
@@ -38,7 +38,7 @@ urlpatterns = [
     path(
         route='clinic/',
         name='clinic',
-        view=views.clinic
+        view=ClinicView.as_view()
     ),
     path(
         route='Dashboard/',
@@ -48,6 +48,6 @@ urlpatterns = [
     path(
         route='reception/',
         name='reception',
-        view=Reception.as_view()
+        view=ReceptionView.as_view()
     ),
 ]

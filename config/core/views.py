@@ -44,10 +44,10 @@ def login_redirect(request: any) -> HttpResponse:
         case HospitalUser.Role.RECEPTIONIST:
             return HttpResponseRedirect('/reception')
         case _:
-            return HttpResponseNotFound("No tienes permisos")
+            return HttpResponseNotFound(Turn.next())
 
 
-class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
+class ReceptionView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = '/login/'
     template_name = 'reception/recepcion.html'
     view_role = HospitalUser.Role.RECEPTIONIST
@@ -72,13 +72,13 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
 
         if not patient_form.is_valid():
             return HttpResponseNotFound("Formulario invalido")
-        
+
         # TODO mostrar lista de opciones
         patient = patient_form.patient()[0]
 
         if not patient.exists():
             return HttpResponseNotFound("Paciente no encontrado")
-        
+
         medical_unit = patient_form.unit()[0]
 
         if not medical_unit.exists():
@@ -88,8 +88,8 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
             return HttpResponseNotFound("Paciente ya tiene turno")
 
         turn = Turn(
-            patient = patient, 
-            medical_unit = medical_unit
+            patient=patient,
+            medical_unit=medical_unit
         )
 
         turn.save()
@@ -97,19 +97,27 @@ class Reception(LoginRequiredMixin, UserPassesTestMixin, View):
         return HttpResponse("valido")
 
 
+class ClinicView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'doctor/clinic.html'
+
+    def test_func(self) -> bool:
+        return self.request.user.role == HospitalUser.Role.DOCTOR
+
+    def get(self, request, *args, **kwargs) -> HttpResponse:
+        return render(request, self.template_name, {
+            "turns": Turn.objects.all()
+        })
+
+    def post(self, request, *args, **kwargs) -> HttpResponse:
+        """Recibe el formulario"""
+        pass
+
+
 @login_required
 def monitor(request: any) -> HttpResponse:
     return render(
         request=request,
         template_name='monitor.html'
-    )
-
-
-@login_required
-def clinic(request: any) -> HttpResponse:
-    return render(
-        request=request,
-        template_name='doctor/clinic.html'
     )
 
 
