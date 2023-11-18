@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 
-from . models import Patient, Doctor, Clinic, HospitalUser
+from . models import Patient, Clinic, HospitalUser
 from . models import MedicalUnit, Turn
 
 class UserLoginForm(AuthenticationForm):

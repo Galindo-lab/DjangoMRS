@@ -72,13 +72,13 @@ class ReceptionView(LoginRequiredMixin, UserPassesTestMixin, View):
 
         if not patient_form.is_valid():
             return HttpResponseNotFound("Formulario invalido")
-        
+
         # TODO mostrar lista de opciones
         patient = patient_form.patient()[0]
 
         if not patient.exists():
             return HttpResponseNotFound("Paciente no encontrado")
-        
+
         medical_unit = patient_form.unit()[0]
 
         if not medical_unit.exists():
@@ -88,21 +88,13 @@ class ReceptionView(LoginRequiredMixin, UserPassesTestMixin, View):
             return HttpResponseNotFound("Paciente ya tiene turno")
 
         turn = Turn(
-            patient = patient, 
-            medical_unit = medical_unit
+            patient=patient,
+            medical_unit=medical_unit
         )
 
         turn.save()
 
         return HttpResponse("valido")
-
-
-@login_required
-def monitor(request: any) -> HttpResponse:
-    return render(
-        request=request,
-        template_name='monitor.html'
-    )
 
 
 class ClinicView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -115,10 +107,19 @@ class ClinicView(LoginRequiredMixin, UserPassesTestMixin, View):
         return render(request, self.template_name, {
             "turns": Turn.objects.all()
         })
-    
+
     def post(self, request, *args, **kwargs) -> HttpResponse:
         """Recibe el formulario"""
         pass
+
+
+@login_required
+def monitor(request: any) -> HttpResponse:
+    return render(
+        request=request,
+        template_name='monitor.html'
+    )
+
 
 @login_required
 def Dashboard(request: any) -> HttpResponse:

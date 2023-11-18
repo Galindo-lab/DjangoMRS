@@ -31,47 +31,6 @@ class HospitalUser(AbstractUser):
         default = Role.NONE
     )
 
-
-class Doctor(models.Model):
-    """Doctores que atienden las clinicas
-
-    Cada doctor tiene un usuario para ingresar al sistema
-    """
-
-
-class MedicalUnit(models.Model):
-    """Unidad medica a la que pertenece la clinica
-
-    Args:
-        models (_type_): _description_
-    """
-
-    class Priority(models.IntegerChoices):
-        """Niveles de urgencia de la unidad medica"""
-        HIGH = 0, "Alto"
-        MEDIUM = 1, "Medio"
-        LOW = 2, "Bajo"
-
-    name = models.CharField(
-        max_length=250,
-        primary_key=True
-    )
-
-    priority = models.IntegerField(
-        choices=Priority.choices,
-        default=Priority.LOW
-    )
-
-
-
-class Clinic(models.Model):
-    """Clinica en la que se atienden los pacientes
-
-    Args:
-        models (_type_): _description_
-    """
-
-
 class Patient(models.Model):
     """Informacion del paciente, copiado diractamente de synthea
 
@@ -122,6 +81,52 @@ class Patient(models.Model):
         )
 
 
+
+class DoctorsOffice(models.Model):
+    """Consultorio del medico"""
+    doctor = models.ForeignKey(
+        to=HospitalUser,
+        on_delete=models.CASCADE,
+        null=True,
+    )
+    
+    patien = models.ForeignKey(
+        to=Patient,
+        on_delete=models.CASCADE,
+    )
+
+
+class MedicalUnit(models.Model):
+    """Unidad medica a la que pertenece la clinica
+
+    Args:
+        models (_type_): _description_
+    """
+
+    class Priority(models.IntegerChoices):
+        """Niveles de urgencia de la unidad medica"""
+        HIGH = 0, "Alto"
+        MEDIUM = 1, "Medio"
+        LOW = 2, "Bajo"
+
+    name = models.CharField(
+        max_length=250,
+        primary_key=True
+    )
+
+    priority = models.IntegerField(
+        choices=Priority.choices,
+        default=Priority.LOW
+    )
+
+
+
+class Clinic(models.Model):
+    """Clinica en la que se atienden los pacientes
+
+    Args:
+        models (_type_): _description_
+    """
 
 class Turn(models.Model):
     """Modelo de turno para el paciente"""
