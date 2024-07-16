@@ -84,111 +84,25 @@
     </div>
 </div>
 
-{# Datos de ejemplo para las tareas en formato JSON #}
-<script id="date-data" type="application/json">
+{#
+    Datos de ejemplo para las tareas en formato JSON
+
     [
         {
-            "name": "Ir al fútbol",
-            "start": "2024-01-10T14:00:00.000Z",
-            "end": "2024-01-10T16:00:00.000Z"
+        "name": "Ir al fútbol",
+        "start": "2024-01-10T14:00:00.000Z",
+        "end": "2024-01-10T16:00:00.000Z"
         },
         {
-            "name": "Ir al gym",
-            "start": "2024-02-11T07:00:00.000Z",
-            "end": "2024-02-11T08:00:00.000Z"
-        },
-        {
-            "name": "Reunión de trabajo",
-            "start": "2024-03-12T09:00:00.000Z",
-            "end": "2024-03-12T10:00:00.000Z"
-        },
-        {
-            "name": "Cita con el dentista",
-            "start": "2024-04-13T11:00:00.000Z",
-            "end": "2024-04-13T12:00:00.000Z"
-        },
-        {
-            "name": "Cenar con amigos",
-            "start": "2024-05-14T19:00:00.000Z",
-            "end": "2024-05-14T21:00:00.000Z"
-        },
-        {
-            "name": "Ir al cine",
-            "start": "2024-06-15T18:00:00.000Z",
-            "end": "2024-06-15T20:00:00.000Z"
-        },
-        {
-            "name": "Clase de yoga",
-            "start": "2024-07-16T06:00:00.000Z",
-            "end": "2024-07-16T07:00:00.000Z"
-        },
-        {
-            "name": "Compras en el supermercado",
-            "start": "2024-08-17T10:00:00.000Z",
-            "end": "2024-08-17T11:00:00.000Z"
-        },
-        {
-            "name": "Visitar a la familia",
-            "start": "2024-09-18T13:00:00.000Z",
-            "end": "2024-09-18T17:00:00.000Z"
-        },
-        {
-            "name": "Ir al teatro",
-            "start": "2024-10-19T20:00:00.000Z",
-            "end": "2024-10-19T22:00:00.000Z"
-        },
-        {
-            "name": "Revisión médica",
-            "start": "2024-11-20T08:00:00.000Z",
-            "end": "2024-11-20T09:00:00.000Z"
-        },
-        {
-            "name": "Paseo en bicicleta",
-            "start": "2024-12-21T15:00:00.000Z",
-            "end": "2024-12-21T17:00:00.000Z"
-        },
-        {
-            "name": "Ir a la playa",
-            "start": "2024-01-22T09:00:00.000Z",
-            "end": "2024-01-22T12:00:00.000Z"
-        },
-        {
-            "name": "Leer un libro",
-            "start": "2024-02-11T14:00:00.000Z",
-            "end": "2024-02-11T16:00:00.000Z"
-        },
-        {
-            "name": "Visitar el museo",
-            "start": "2024-03-24T10:00:00.000Z",
-            "end": "2024-03-24T12:00:00.000Z"
-        },
-        {
-            "name": "Correr en el parque",
-            "start": "2024-04-13T07:00:00.000Z",
-            "end": "2024-04-13T08:00:00.000Z"
-        },
-        {
-            "name": "Tomar un café",
-            "start": "2024-05-14T09:00:00.000Z",
-            "end": "2024-05-14T10:00:00.000Z"
-        },
-        {
-            "name": "Asistir a un concierto",
-            "start": "2024-06-15T19:00:00.000Z",
-            "end": "2024-06-15T22:00:00.000Z"
-        },
-        {
-            "name": "Clase de cocina",
-            "start": "2024-07-16T16:00:00.000Z",
-            "end": "2024-07-16T18:00:00.000Z"
-        },
-        {
-            "name": "Hacer senderismo",
-            "start": "2024-08-17T08:00:00.000Z",
-            "end": "2024-08-17T11:00:00.000Z"
+        "name": "Ir al gym",
+        "start": "2024-02-11T07:00:00.000Z",
+        "end": "2024-02-11T08:00:00.000Z"
         }
     ]
-</script>
+
+#}
+{{ form|json_script:"date-data"}}
+
 
 <script>
     // Datos y configuraciones iniciales
