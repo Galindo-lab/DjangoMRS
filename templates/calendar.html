@@ -19,51 +19,52 @@
 <body class="bg-light" style="min-height: 75rem; padding-top: 2.5rem; padding-bottom: 4.5rem;">
 
 <div class="container" id="app">
-    {# Barra de navegación fija con menú desplegable #}
-    <nav class="navbar fixed-top bg-body-tertiary">
-        <div class="container-fluid">
-            {# Botón para mostrar menú offcanvas en dispositivos móviles #}
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                    aria-controls="offcanvasNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    {# Barra de navegación fija con menú <des></des>plegable #}
+    <div class="fixed-top bg-light border align-middle">
 
-            {# Controles para cambiar el año #}
-            <div>
+        <div class="row m-2">
+            <div class="col">
+                <div class="d-flex gap-2">
+                    <a class="btn btn-light d-none d-md-inline"><i class="bi bi-plus-lg"></i> Crear</a>
+                    <a class="btn btn-outline-secondary" href="#today">Hoy</a>
+                </div>
+            </div>
+
+            <div class="col text-end text-md-center">
                 <button class="btn btn-light" @click="decrementYear"><i class="bi bi-chevron-left"></i></button>
-                <span class="align-middle">[[ year ]]</span>
+                <span class="align-middle fs-3">[[ year ]]</span>
                 <button class="btn btn-light" @click="incrementYear"><i class="bi bi-chevron-right"></i></button>
             </div>
 
-            {# Enlace para ir a la fecha de hoy #}
-            <a class="active btn border mr-4" href="#today">Hoy</a>
-
-            {# Menú offcanvas #}
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
-                 aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Home</a>
-                            <a class="nav-link active" href="#today">Hoy</a>
-                        </li>
-                    </ul>
+            <div class="col d-none d-md-inline">
+                <div class="col">
+                <div class="d-flex flex-row-reverse gap-1">
+                    <a class="btn btn-light"><i class="bi bi-layout-three-columns"></i> Mes</a>
+                    <a class="btn btn-light"><i class="bi bi-grid-3x2-gap"></i> Semana</a>
                 </div>
             </div>
+            </div>
         </div>
-    </nav>
+
+
+    </div>
+
+
+    {# Botton flotante #}
+    <div class="container fixed-bottom text-end d-md-none">
+        <a href="#today" class="btn btn-primary btn-lg m-3 shadow-sm ">
+            <i class="bi bi-plus-lg"></i>
+        </a>
+    </div>
+
 
     {# Contenedor principal para mostrar el calendario #}
     <div class="col col-md-7 mx-auto align-items-start">
         <div v-for="(month, index) in monthsOfYear" class="pt-5">
-            <span class="fs-4 text-primary-emphasis">[[ month ]] de [[ year ]]</span>
+            <span class="fs-4 text-primary-emphasis text-capitalize">[[ month ]]</span>
             <div v-for="week in getWeeksInMonth(year, index)" class="mt-3 mb-1">
                 {# Ancla para la fecha de hoy #}
-                <a id="today" v-if="isDateInRange(today, week[0], week[1])"></a>
+                <a id="today" style="" v-if="isDateInRange(today, week[0], week[1])"></a>
 
                 <div class="text-secondary my-3 small">
                     [[ formatDateRange(week[0], week[1]) ]]
@@ -89,23 +90,24 @@
     </div>
 </div>
 
-{#
+{% comment %}
     Datos de ejemplo para las tareas en formato JSON
 
     [
-        {
-        "name": "Ir al fútbol",
-        "start": "2024-01-10T14:00:00.000Z",
-        "end": "2024-01-10T16:00:00.000Z"
-        },
-        {
-        "name": "Ir al gym",
-        "start": "2024-02-11T07:00:00.000Z",
-        "end": "2024-02-11T08:00:00.000Z"
-        }
+    {
+    "name": "Ir al fútbol",
+    "start": "2024-01-10T14:00:00.000Z",
+    "end": "2024-01-10T16:00:00.000Z"
+    },
+    {
+    "name": "Ir al gym",
+    "start": "2024-02-11T07:00:00.000Z",
+    "end": "2024-02-11T08:00:00.000Z"
+    }
     ]
+{% endcomment %}
 
-#}
+
 {{ form|json_script:"date-data"}}
 
 
