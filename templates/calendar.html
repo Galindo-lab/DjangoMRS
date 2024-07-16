@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Document</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    {# Load the tag library #}
+    {% load django_bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+<body class="bg-light" style="min-height: 75rem; padding-top: 2.5rem; padding-bottom: 4.5rem;">
+
+
+<div class="container" id="app">
+
+    <nav class="navbar fixed-top bg-body-tertiary" aria-label="Light offcanvas navbar">
+        <div class="container-fluid">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarLight" aria-controls="offcanvasNavbarLight">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+
+              
+              <div class="">
+                <button class="btn btn-light" @click="decrementYear"><i class="bi bi-chevron-left"></i></button>
+                <span class="align-middle ">[[ year ]]</span>
+                <button class="btn btn-light" @click="incrementYear"><i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+
+
+            <a class="active btn border mr-4" aria-current="page" href="#today">Hoy</a>
+ 
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbarLight" aria-labelledby="offcanvasNavbarLightLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLightLabel">Offcanvas</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  <a class="nav-link active" aria-current="page" href="#today">Hoy</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+
+
+    <!--nav class="navbar fixed-top bg-body-tertiary">
+        <div class="container-fluid">
+
+            <div class="">
+                <button class="btn btn-light" @click="decrementYear"><i class="bi bi-chevron-left"></i></button>
+                <span class="align-middle ">[[ year ]]</span>
+                <button class="btn btn-light" @click="incrementYear"><i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="d-flex justify-content-evenly">
+                <a class="active btn border mr-4" aria-current="page" href="#today">Hoy</a>
+                <a class="active btn" aria-current="page" href="#today"><i class="bi bi-plus-circle"></i> Crear</a>
+            </div>
+        </div>
+
+    </nav-->
+
+
+    <div class="">
+        <div class="col col-md-7 mx-auto align-items-start">
+            <div class="row-1" v-for="(month, index) in monthsOfYear">
+
+                <div class="pt-5">
+                    <span class="fs-4 text-primary-emphasis">[[ month ]] de [[ year ]]</span>
+                </div>
+
+                <div v-for="item in getWeeksInMonth(year, index)">
+
+                    <div class="small mt-3 mb-1 text-secondary">
+                        [[ formatDateRange(item[0], item[1]) ]]
+
+                        <a id="today" v-if="isDateInRange(new Date(), item[0], item[1])"></a>
+
+                    </div>
+
+                    <div class="mb-2 py-1 row" v-for="item in diasUnicos(tareasEntreFechas(item[0], item[1]))">
+
+                        <div class="col-2 text-center py-1">
+                            <div class="">
+                                <div class="">
+                                    [[ shortDayNames[item.getDay()] ]]
+                                </div>
+                                <div class="fs-4">
+                                    [[ item.getDate() ]]
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="col my-2 px-2 py-1 bg-primary text-white radio rounded"
+                                 v-for="task in getTasksForDate(item)">
+                                <div class="fw-medium">[[ task.name ]]</div>
+                                <div class="small">[[ formatTimeRange(task.start, task.end) ]]</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</body>
+
+<!-- ISO 8601 -->
+<script id="date-data" type="application/json">
+    [
+        {
+            "name": "Ir al fútbol",
+            "start": "2024-01-10T14:00:00.000Z",
+            "end": "2024-01-10T16:00:00.000Z"
+        },
+        {
+            "name": "Ir al gym",
+            "start": "2024-02-11T07:00:00.000Z",
+            "end": "2024-02-11T08:00:00.000Z"
+        },
+        {
+            "name": "Reunión de trabajo",
+            "start": "2024-03-12T09:00:00.000Z",
+            "end": "2024-03-12T10:00:00.000Z"
+        },
+        {
+            "name": "Cita con el dentista",
+            "start": "2024-04-13T11:00:00.000Z",
+            "end": "2024-04-13T12:00:00.000Z"
+        },
+        {
+            "name": "Cenar con amigos",
+            "start": "2024-05-14T19:00:00.000Z",
+            "end": "2024-05-14T21:00:00.000Z"
+        },
+        {
+            "name": "Ir al cine",
+            "start": "2024-06-15T18:00:00.000Z",
+            "end": "2024-06-15T20:00:00.000Z"
+        },
+        {
+            "name": "Clase de yoga",
+            "start": "2024-07-16T06:00:00.000Z",
+            "end": "2024-07-16T07:00:00.000Z"
+        },
+        {
+            "name": "Compras en el supermercado",
+            "start": "2024-08-17T10:00:00.000Z",
+            "end": "2024-08-17T11:00:00.000Z"
+        },
+        {
+            "name": "Visitar a la familia",
+            "start": "2024-09-18T13:00:00.000Z",
+            "end": "2024-09-18T17:00:00.000Z"
+        },
+        {
+            "name": "Ir al teatro",
+            "start": "2024-10-19T20:00:00.000Z",
+            "end": "2024-10-19T22:00:00.000Z"
+        },
+        {
+            "name": "Revisión médica",
+            "start": "2024-11-20T08:00:00.000Z",
+            "end": "2024-11-20T09:00:00.000Z"
+        },
+        {
+            "name": "Paseo en bicicleta",
+            "start": "2024-12-21T15:00:00.000Z",
+            "end": "2024-12-21T17:00:00.000Z"
+        },
+        {
+            "name": "Ir a la playa",
+            "start": "2024-01-22T09:00:00.000Z",
+            "end": "2024-01-22T12:00:00.000Z"
+        },
+        {
+            "name": "Leer un libro",
+            "start": "2024-02-11T14:00:00.000Z",
+            "end": "2024-02-11T16:00:00.000Z"
+        },
+        {
+            "name": "Visitar el museo",
+            "start": "2024-03-24T10:00:00.000Z",
+            "end": "2024-03-24T12:00:00.000Z"
+        },
+        {
+            "name": "Correr en el parque",
+            "start": "2024-04-13T07:00:00.000Z",
+            "end": "2024-04-13T08:00:00.000Z"
+        },
+        {
+            "name": "Tomar un café",
+            "start": "2024-05-14T09:00:00.000Z",
+            "end": "2024-05-14T10:00:00.000Z"
+        },
+        {
+            "name": "Asistir a un concierto",
+            "start": "2024-06-15T19:00:00.000Z",
+            "end": "2024-06-15T22:00:00.000Z"
+        },
+        {
+            "name": "Clase de cocina",
+            "start": "2024-07-16T16:00:00.000Z",
+            "end": "2024-07-16T18:00:00.000Z"
+        },
+        {
+            "name": "Hacer senderismo",
+            "start": "2024-08-17T08:00:00.000Z",
+            "end": "2024-08-17T11:00:00.000Z"
+        }
+    ]
+</script>
+
+<script>
+    const dateData = JSON.parse(document.getElementById('date-data').textContent);
+    const monthNames = ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
+    const shortDayNames = ["Dom.", "Lun.", "Mar.", "Mie.", "Jue.", "Vie.", "Sab."]
+
+
+    const app = Vue.createApp({
+        delimiters: ['[[', ']]'],
+        data() {
+            return {
+                shortDayNames: shortDayNames,
+
+                daysOfWeek: diasDeLaSemana = Array.from({length: 7}, (_, i) => {
+                    // Crear una fecha con el día correspondiente (empezando desde lunes)
+                    const fecha = new Date(2024, 0, i + 1);
+                    const nombreDia = new Intl.DateTimeFormat('es-ES', {weekday: 'long'}).format(fecha);
+                    return nombreDia.charAt(0).toUpperCase() + nombreDia.slice(1);
+                }),
+
+                monthsOfYear: Array.from({length: 12}, (_, i) => {
+                    // Crear una fecha con el mes correspondiente
+                    const fecha = new Date(2024, i);
+                    const nombreMes = new Intl.DateTimeFormat('es-ES', {month: 'long'}).format(fecha);
+                    return nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+                }),
+
+                year: new Date().getFullYear(),
+                today: new Date()
+            }
+
+        },
+        methods: {
+            incrementYear() {
+                this.year++;
+            },
+
+            decrementYear() {
+                this.year--;
+            },
+
+            isDateInRange(date, startDate, endDate) {
+                const dateToCheck = (date);
+                const start = (startDate);
+                const end = (endDate);
+
+                return dateToCheck >= start && dateToCheck <= end;
+            },
+
+            getTasksForDate(date) {
+                const targetDate = new Date(date).toISOString().split('T')[0];
+
+                return dateData.filter(task => {
+                    const taskStartDate = new Date(task.start).toISOString().split('T')[0];
+                    const taskEndDate = new Date(task.end).toISOString().split('T')[0];
+
+                    return taskStartDate === targetDate || taskEndDate === targetDate;
+                });
+            },
+
+            diasUnicos(tareas) {
+                let fechasUnicas = new Set();
+                tareas.forEach(tarea => {
+                    let start = new Date(tarea.start);
+                    let end = new Date(tarea.end);
+
+                    fechasUnicas.add(start.toISOString().split('T')[0]);
+                    fechasUnicas.add(end.toISOString().split('T')[0]);
+                });
+
+                return Array.from(fechasUnicas).map(dateString => new Date(dateString)).sort((a, b) => a - b);
+            },
+
+            tareasEntreFechas(fechaInicio, fechaFin) {
+                // Convertir las fechas de inicio y fin a objetos Date
+                let inicio = new Date(fechaInicio);
+                let fin = new Date(fechaFin);
+
+                // Filtrar las tareas que están entre las fechas dadas
+                let tareasFiltradas = dateData.filter(tarea => {
+                    let start = new Date(tarea.start);
+                    let end = new Date(tarea.end);
+
+                    // La tarea debe empezar después de la fecha de inicio y terminar antes de la fecha de fin
+                    return (start >= inicio && start <= fin) || (end >= inicio && end <= fin) || (start <= inicio && end >= fin);
+                });
+
+                // Ordenar las tareas filtradas por la fecha de inicio
+                tareasFiltradas.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+                return tareasFiltradas;
+            },
+
+            formatTimeRange(startDate, endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+
+                const formatTime = (date) => {
+                    let hours = date.getUTCHours();
+                    const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12; // El 0 debe ser 12
+                    return `${hours} ${ampm}`;
+                };
+
+                const startTime = formatTime(start);
+                const endTime = formatTime(end);
+
+                const startPeriod = startTime.includes('a.m.') ? 'a.m.' : 'p.m.';
+                const endPeriod = endTime.includes('a.m.') ? 'a.m.' : 'p.m.';
+
+                if (startPeriod === endPeriod) {
+                    return `${startTime.split('a.m.')[0].split('p.m.')[0]} - ${endTime}`;
+                } else {
+                    return `${startTime} - ${endTime}`;
+                }
+            },
+
+            formatDateRange(startDate, endDate) {
+                const startDay = startDate.getDate();
+                const endDay = endDate.getDate();
+                const startMonth = startDate.getMonth();
+                const endMonth = endDate.getMonth();
+
+                if (startMonth === endMonth) {
+                    return `${startDay} - ${endDay} de ${monthNames[startMonth]}`;
+                } else {
+                    return `${startDay} de ${monthNames[startMonth]} - ${endDay} de ${monthNames[endMonth]}`;
+                }
+            },
+
+            getWeeksInMonth(year, month) {
+                const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+                // Calcular el primer día del mes
+                let startDate = new Date(year, month, 1);
+                // Calcular el último día del mes
+                let endDate = new Date(year, month + 1, 0);
+
+                // Ajustar startDate para que sea el lunes de la semana de inicio del mes
+                let startDay = startDate.getDay();
+                startDate = new Date(startDate.getTime() + ((startDay === 0 ? 1 : 8 - startDay) % 7) * MS_PER_DAY);
+
+                // Ajustar endDate para que sea el domingo de la semana del final del mes
+                let endDay = endDate.getDay();
+                endDate = new Date(endDate.getTime() + (7 - endDay) * MS_PER_DAY);
+
+                // Calcular el número de semanas completas en el rango ajustado
+                const numberOfWeeks = Math.floor((endDate - startDate) / (7 * MS_PER_DAY)) + 1;
+
+                // Generar los lunes y domingos usando programación funcional
+                const weeks = Array.from({length: numberOfWeeks}, (_, i) => {
+                    const monday = new Date(startDate.getTime() + i * 7 * MS_PER_DAY);
+                    const sunday = new Date(monday.getTime() + 6 * MS_PER_DAY);
+                    return [monday, sunday];
+                });
+
+                // Filtrar semanas que no están completamente dentro del mes
+                return weeks.filter(week => week[0].getMonth() === month || week[1].getMonth() === month);
+            }
+
+        },
+    })
+
+
+    app.mount('#app');
+
+</script>
+</html>
+
