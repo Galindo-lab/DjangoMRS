@@ -1,7 +1,10 @@
 @startuml
 !theme plain
 skinparam classAttributeIconSize 0
-
+skinparam linetype polyline
+' skinparam ArrowThickness 3
+' skinparam defaultFontName bold
+' left to right direction
 
 ' Descripción de las clases
 ' Agenda: La clase principal que actúa como un contenedor para todas las demás secciones de la agenda. Incluye métodos para agregar y obtener calendarios, tareas, notas, contactos, eventos y recordatorios. Representa la estructura general de la agenda.
@@ -9,7 +12,7 @@ skinparam classAttributeIconSize 0
 ' Task: La clase Task maneja las tareas que se pueden añadir a la agenda. Cada tarea tiene un título, descripción, fecha límite y un estado de completado. Incluye métodos para crear, leer, actualizar y borrar tareas.
 ' Note: La clase Note representa las notas que se pueden añadir a la agenda. Cada nota tiene un título y contenido. Proporciona métodos para crear, leer, actualizar y borrar notas.
 ' Contact: La clase Contact maneja los contactos de la agenda. Cada contacto tiene un nombre, teléfono y correo electrónico. Incluye métodos para crear, leer, actualizar y borrar contactos.
-' Event: La clase Event representa los eventos del calendario. Cada evento tiene un título, descripción, fecha, una lista de contactos y una lista de recordatorios asociados. Proporciona métodos para crear, leer, actualizar y borrar eventos.
+' Event: La clase Event representa los eventos del calendario. Cada evento tiene un título, descripción, fecha, hora de inicio, hora de finalización, una lista de contactos y una lista de recordatorios asociados. Proporciona métodos para crear, leer, actualizar y borrar eventos.
 ' Reminder: La clase Reminder maneja los recordatorios asociados con eventos. Cada recordatorio tiene un mensaje y una fecha y hora. Incluye métodos para crear, leer, actualizar y borrar recordatorios.
 
 class Agenda {
@@ -69,9 +72,11 @@ class Event {
   -title: String
   -description: String
   -date: Date
+  -startTime: DateTime
+  -endTime: DateTime
   -contacts: List<Contact>
   -reminders: List<Reminder>
-  +createEvent(title: String, description: String, date: Date)
+  +createEvent(title: String, description: String, date: Date, startTime: DateTime, endTime: DateTime)
   +readEvent(): Event
   +updateEvent(e: Event)
   +deleteEvent()
@@ -86,16 +91,22 @@ class Reminder {
   +deleteReminder()
 }
 
-Agenda --> "1" Calendar
-Agenda --> "0..*" Task
-Agenda --> "0..*" Note
-Agenda --> "0..*" Contact
-Agenda --> "0..*" Event
-Agenda --> "0..*" Reminder
+together {
+  Calendar "1" --> "0..*" Event : contains
+  Event "0..*" --> "0..*" Reminder : has
+}
 
-Calendar --> "0..*" Event
-Event --> "0..*" Reminder
-Task --> "0..*" Note
-Event --> "0..*" Contact
-Task --> "0..*" Contact
+together {
+  Task "0..*" --> "0..*" Note : includes
+  Event "0..*" --> "0..*" Contact : involves
+  Task "0..*" --> "0..*" Contact : involves
+}
+
+Agenda "1" --> "1" Calendar : manages
+Agenda "1" --> "0..*" Task : manages
+Agenda "1" --> "0..*" Note : manages
+Agenda "1" --> "0..*" Contact : manages
+Agenda "1" --> "0..*" Event : manages
+Agenda "1" --> "0..*" Reminder : manages
+
 @enduml
