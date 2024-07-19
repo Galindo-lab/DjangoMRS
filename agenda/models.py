@@ -4,28 +4,6 @@ from django.db import models
 import datetime
 
 
-# Create your models here.
-class Activity(models.Model):
-    name = models.CharField(max_length=255)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
-
-    def to_dict(self):
-        return {
-            'name': self.name,
-            'start': self.start,
-            'end': self.end
-        }
-
-    def to_json(self):
-        return json.dumps(self.to_dict())
-
-    def __str__(self):
-        return self.name
-
-
-from django.db import models
-
 class Calendar(models.Model):
     """
     Represents the calendar in the agenda.
@@ -189,6 +167,16 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     contacts = models.ManyToManyField('Contact', related_name='events')
     reminders = models.ManyToManyField('Reminder', related_name='events')
+
+    def to_dict(self):
+        return {
+            'name': self.title,
+            'start': self.start_time,
+            'end': self.end_time
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
     def create_event(self, title, description, date, start_time, end_time):
         """
