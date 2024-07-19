@@ -1,0 +1,101 @@
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+
+
+' Descripción de las clases
+' Agenda: La clase principal que actúa como un contenedor para todas las demás secciones de la agenda. Incluye métodos para agregar y obtener calendarios, tareas, notas, contactos, eventos y recordatorios. Representa la estructura general de la agenda.
+' Calendar: Esta clase representa el calendario de la agenda. Contiene una lista de eventos y proporciona métodos para agregar, obtener, actualizar y eliminar eventos.
+' Task: La clase Task maneja las tareas que se pueden añadir a la agenda. Cada tarea tiene un título, descripción, fecha límite y un estado de completado. Incluye métodos para crear, leer, actualizar y borrar tareas.
+' Note: La clase Note representa las notas que se pueden añadir a la agenda. Cada nota tiene un título y contenido. Proporciona métodos para crear, leer, actualizar y borrar notas.
+' Contact: La clase Contact maneja los contactos de la agenda. Cada contacto tiene un nombre, teléfono y correo electrónico. Incluye métodos para crear, leer, actualizar y borrar contactos.
+' Event: La clase Event representa los eventos del calendario. Cada evento tiene un título, descripción, fecha, una lista de contactos y una lista de recordatorios asociados. Proporciona métodos para crear, leer, actualizar y borrar eventos.
+' Reminder: La clase Reminder maneja los recordatorios asociados con eventos. Cada recordatorio tiene un mensaje y una fecha y hora. Incluye métodos para crear, leer, actualizar y borrar recordatorios.
+
+class Agenda {
+  +addCalendar(c: Calendar)
+  +getCalendar(): Calendar
+  +addTask(t: Task)
+  +getTasks(): List<Task>
+  +addNote(n: Note)
+  +getNotes(): List<Note>
+  +addContact(c: Contact)
+  +getContacts(): List<Contact>
+  +addEvent(e: Event)
+  +getEvents(): List<Event>
+  +addReminder(r: Reminder)
+  +getReminders(): List<Reminder>
+}
+
+class Calendar {
+  -events: List<Event>
+  +addEvent(e: Event)
+  +getEvents(): List<Event>
+  +updateEvent(e: Event)
+  +deleteEvent(e: Event)
+}
+
+class Task {
+  -title: String
+  -description: String
+  -dueDate: Date
+  -completed: Boolean
+  +createTask(title: String, description: String, dueDate: Date)
+  +readTask(): Task
+  +updateTask(t: Task)
+  +deleteTask()
+}
+
+class Note {
+  -title: String
+  -content: String
+  +createNote(title: String, content: String)
+  +readNote(): Note
+  +updateNote(n: Note)
+  +deleteNote()
+}
+
+class Contact {
+  -name: String
+  -phone: String
+  -email: String
+  +createContact(name: String, phone: String, email: String)
+  +readContact(): Contact
+  +updateContact(c: Contact)
+  +deleteContact()
+}
+
+class Event {
+  -title: String
+  -description: String
+  -date: Date
+  -contacts: List<Contact>
+  -reminders: List<Reminder>
+  +createEvent(title: String, description: String, date: Date)
+  +readEvent(): Event
+  +updateEvent(e: Event)
+  +deleteEvent()
+}
+
+class Reminder {
+  -message: String
+  -dateTime: DateTime
+  +createReminder(message: String, dateTime: DateTime)
+  +readReminder(): Reminder
+  +updateReminder(r: Reminder)
+  +deleteReminder()
+}
+
+Agenda --> "1" Calendar
+Agenda --> "0..*" Task
+Agenda --> "0..*" Note
+Agenda --> "0..*" Contact
+Agenda --> "0..*" Event
+Agenda --> "0..*" Reminder
+
+Calendar --> "0..*" Event
+Event --> "0..*" Reminder
+Task --> "0..*" Note
+Event --> "0..*" Contact
+Task --> "0..*" Contact
+@enduml
