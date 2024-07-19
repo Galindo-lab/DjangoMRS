@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Items</title>
+    <!-- Incluir Alpine.js -->
+    <script src="https://unpkg.com/alpinejs@3.10.5" defer></script>
+</head>
+<body>
+    <h1>Lista de Items</h1>
+
+    <div x-data="itemList()">
+        <button @click="fetchItems">Cargar Items</button>
+        <template x-for="item in items" :key="item.id">
+            <div>
+                <h2 x-text="item.title"></h2>
+                <p x-text="item.description"></p>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function itemList() {
+            return {
+                items: [],
+                fetchItems() {
+                    fetch('/api/items/')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.items = data;
+                        });
+                }
+            }
+        }
+    </script>
+</body>
+</html>

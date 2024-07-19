@@ -170,7 +170,7 @@ class Event(models.Model):
 
     def to_dict(self):
         return {
-            'name': self.title,
+            'title': self.title,
             'start': self.start_time,
             'end': self.end_time
         }
