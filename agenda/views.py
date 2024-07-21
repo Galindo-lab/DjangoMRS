@@ -9,12 +9,6 @@ def agenda_view(request):
     return render(request, 'agenda/agenda.html')
 
 
-
-
-
-
-
-
 # Create your views here.
 def calendarView(request):
     return render(request, 'calendar_alphine.html', {

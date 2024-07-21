@@ -1,0 +1,21 @@
+{% extends 'agenda/base.html' %}
+{% load static %}
+
+{% block script %}
+    <script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('calendarApp', () => ({
+            shortDayNames: ["Dom.", "Lun.", "Mar.", "Mie.", "Jue.", "Vie.", "Sab."],
+            shortMonthNames: ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."],
+            month: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        }));
+    });
+    </script>
+{% endblock %}
+
+{% block main %}
+	<div class="container-flex">
+
+    </div>
+{% endblock %}
+
