@@ -1,111 +1,8 @@
+import datetime
 import json
 
+from django.contrib.auth.models import User
 from django.db import models
-import datetime
-
-
-class Calendar(models.Model):
-    """
-    Represents the calendar in the agenda.
-
-    Attributes:
-        events (QuerySet[Event]): A list of events in the calendar.
-    """
-    events = models.ManyToManyField('Event', related_name='calendars')
-
-    def add_event(self, event):
-        """
-        Adds an event to the calendar.
-
-        :param event: The event to add.
-        :type event: Event
-        """
-        self.events.add(event)
-
-    def get_events(self):
-        """
-        Gets all events in the calendar.
-
-        :return: A queryset of events.
-        :rtype: QuerySet[Event]
-        """
-        return self.events.all()
-
-
-class Task(models.Model):
-    """
-    Represents a task in the agenda.
-
-    Attributes:
-        title (str): The title of the task.
-        description (str): The description of the task.
-        due_date (date): The due date of the task.
-        completed (bool): Whether the task is completed.
-    """
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    due_date = models.DateField()
-    completed = models.BooleanField(default=False)
-
-    def create_task(self, title, description, due_date):
-        """
-        Creates a new task.
-
-        :param title: The title of the task.
-        :type title: str
-        :param description: The description of the task.
-        :type description: str
-        :param due_date: The due date of the task.
-        :type due_date: date
-        """
-        self.title = title
-        self.description = description
-        self.due_date = due_date
-        self.completed = False
-        self.save()
-
-    def read_task(self):
-        """
-        Reads the task details.
-
-        :return: The task instance.
-        :rtype: Task
-        """
-        return self
-
-
-class Note(models.Model):
-    """
-    Represents a note in the agenda.
-
-    Attributes:
-        title (str): The title of the note.
-        content (str): The content of the note.
-    """
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-
-    def create_note(self, title, content):
-        """
-        Creates a new note.
-
-        :param title: The title of the note.
-        :type title: str
-        :param content: The content of the note.
-        :type content: str
-        """
-        self.title = title
-        self.content = content
-        self.save()
-
-    def read_note(self):
-        """
-        Reads the note details.
-
-        :return: The note instance.
-        :rtype: Note
-        """
-        return self
 
 
 class Contact(models.Model):
@@ -147,6 +44,14 @@ class Contact(models.Model):
         return self
 
 
+class RepeatChoices(models.TextChoices):
+    NO_REPEAT = 'NR', 'Does not repeat'
+    DAILY = 'DA', 'Daily'
+    WEEKLY = 'WE', 'Weekly'
+    MONTHLY = 'MO', 'Monthly'
+    YEARLY = 'YE', 'Yearly'
+
+
 class Event(models.Model):
     """
     Represents an event in the calendar.
@@ -161,12 +66,11 @@ class Event(models.Model):
         reminders (QuerySet[Reminder]): A list of reminders for the event.
     """
     title = models.CharField(max_length=255)
-    description = models.TextField()
-    date = models.DateField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     contacts = models.ManyToManyField('Contact', related_name='events')
-    reminders = models.ManyToManyField('Reminder', related_name='events')
+    repeat = models.CharField(default=RepeatChoices.NO_REPEAT, choices=RepeatChoices.choices, max_length=2)
+    all_day = models.BooleanField(default=False)
 
     def to_dict(self):
         return {
@@ -210,40 +114,6 @@ class Event(models.Model):
         return self
 
 
-class Reminder(models.Model):
-    """
-    Represents a reminder for an event.
-
-    Attributes:
-        message (str): The reminder message.
-        date_time (datetime): The date and time of the reminder.
-    """
-    message = models.CharField(max_length=255)
-    date_time = models.DateTimeField()
-
-    def create_reminder(self, message, date_time):
-        """
-        Creates a new reminder.
-
-        :param message: The reminder message.
-        :type message: str
-        :param date_time: The date and time of the reminder.
-        :type date_time: datetime
-        """
-        self.message = message
-        self.date_time = date_time
-        self.save()
-
-    def read_reminder(self):
-        """
-        Reads the reminder details.
-
-        :return: The reminder instance.
-        :rtype: Reminder
-        """
-        return self
-
-
 class Agenda(models.Model):
     """
     Represents the agenda containing all other sections.
@@ -262,12 +132,9 @@ class Agenda(models.Model):
         add_reminder(reminder)
         get_reminders()
     """
-    calendar = models.OneToOneField(Calendar, on_delete=models.CASCADE)
-    tasks = models.ManyToManyField(Task, related_name='agendas')
-    notes = models.ManyToManyField(Note, related_name='agendas')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     contacts = models.ManyToManyField(Contact, related_name='agendas')
     events = models.ManyToManyField(Event, related_name='agendas')
-    reminders = models.ManyToManyField(Reminder, related_name='agendas')
 
     def add_calendar(self, calendar):
         """
