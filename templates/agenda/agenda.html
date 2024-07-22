@@ -148,10 +148,12 @@
                                 <div class="col">
                                     {# Tarea #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
-                                        <div class="col my-2 px-2 py-1 border rounded">
-                                            <div class="fw-medium" x-text="task.name"></div>
-                                            <div class="small" x-text="formatTimeRange(task.start, task.end)"></div>
-                                        </div>
+                                        <a href="#" class="text-decoration-none">
+                                            <div class="col my-2 px-2 py-1 border rounded">
+                                                <div class="fw-medium" x-text="task.name"></div>
+                                                <div class="small" x-text="formatTimeRange(task.start, task.end)"></div>
+                                            </div>
+                                        </a>
                                     </template>
                                 </div>
                             </div>
