@@ -9,6 +9,14 @@ def agenda_view(request):
     return render(request, 'agenda/agenda.html')
 
 
+def new_event_view(request):
+    return ""
+
+
+def event_list_json(request):
+    return JsonResponse(list(Event.objects.values()), safe=False)
+
+
 # Create your views here.
 def calendarView(request):
     return render(request, 'calendar_alphine.html', {
@@ -17,6 +25,7 @@ def calendarView(request):
     })
 
 
+"""
 def item_list(request):
     items = Event.objects.all()
     return render(request, 'calendar_alphine.html', {'items': items})
@@ -25,3 +34,4 @@ def item_list(request):
 def item_list_json(request):
     items = list(Event.objects.values())
     return JsonResponse(items, safe=False)
+"""
