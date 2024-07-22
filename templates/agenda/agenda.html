@@ -1,4 +1,4 @@
-{% extends 'agenda/base.html' %}
+{% extends 'agenda/base-nav.html' %}
 {% load static %}
 
 {% block script %}
@@ -75,7 +75,7 @@
                 init() {
                     this.events = JSON.parse(document.getElementById('events').textContent) || [];
                 },
-                formatWeekday(locale, date, format) {
+                formatWeekday(locale = 'en-US', date, format) {
                     const weekdayFormatter = new Intl.DateTimeFormat(locale, {weekday: format});
                     return weekdayFormatter.format(date)
                 },
@@ -111,17 +111,72 @@
                         return `${hours} ${ampm}`;
                     };
                     return `${formatTime(new Date(start))} - ${formatTime(new Date(end))}`;
+                },
+                getMonthNames(locale = 'en-US', format = 'long') {
+                    const monthFormatter = new Intl.DateTimeFormat(locale, {month: format});
+                    return Array.from({length: 12}, (_, month) =>
+                        monthFormatter.format(new Date(2020, month, 1))
+                    );
+                },
+                getWeeksInMonth(year, month) {
+                    const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+                    let startDate = new Date(year, month, 1);
+                    let endDate = new Date(year, month + 1, 0);
+
+                    startDate = new Date(startDate.getTime() + ((startDate.getDay() + 6) % 7) * MS_PER_DAY);
+                    endDate = new Date(endDate.getTime() + (7 - endDate.getDay()) * MS_PER_DAY);
+
+                    const numberOfWeeks = Math.floor((endDate - startDate) / (7 * MS_PER_DAY)) + 1;
+
+                    return Array.from({length: numberOfWeeks}, (_, i) => {
+                        const monday = new Date(startDate.getTime() + i * 7 * MS_PER_DAY);
+                        const sunday = new Date(monday.getTime() + 6 * MS_PER_DAY);
+                        return [monday, sunday];
+                    }).filter(week => week[0].getMonth() === month || week[1].getMonth() === month);
+                },
+                formatDateRange(locale = 'en-US', start, end) {
+                    const startDay = start.getDate();
+                    const startMonthName = start.toLocaleDateString(locale, {day: 'numeric', month: 'short'});
+                    const endMonthName = end.toLocaleDateString(locale, {day: 'numeric', month: 'short'});
+
+                    return start.getMonth() === end.getMonth() ?
+                        `${startDay} - ${endMonthName}` :    // 1 - 7 de julio
+                        `${startMonthName} - ${endMonthName}`; // 30 de julio - 5 de agosto
                 }
             }));
         });
     </script>
 {% endblock %}
 
+
+{% block nav %}
+    <a class="navbar-brand fw-light" href="#">
+        TimePulse
+    </a>
+
+    <div class="d-flex align-items-center">
+        <!-- Camara -->
+        <a class="btn btn-large" href="">
+            <i class="bi bi-calendar-day"></i>
+        </a>
+
+        <!-- Dropdown -->
+        <div class="flex-shrink-0 dropdown">
+            <a href="#" class="d-block btn" data-bs-toggle="dropdown" aria-expanded="true">
+                <i class="bi bi-three-dots-vertical"></i>
+            </a>
+            <ul class="dropdown-menu text-small shadow-sm"
+                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 34px, 0px);"
+                data-popper-placement="bottom-end">
+                <li><a class="dropdown-item py-2" href="#">Nuevo grupo</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+ {# Lista de eventos #}
 {% block main %}
-
-
-
-    {# Lista de eventos #}
     <div class="container col-md-7" style="padding-top: 2.5rem; padding-bottom: 4.5rem;" x-data="agendaApp">
         <template x-for="(month, index) in getMonthNames(locale)">
             <div class="row">
@@ -135,7 +190,7 @@
                         {# Semana #}
                         <div class="my-1">
                             <span class="text-secondary small"
-                                  x-text="formatDateRange(week[0], week[1], locale)"></span>
+                                  x-text="formatDateRange(locale, week[0], week[1])"></span>
                         </div>
 
                         <template x-for="eventDate in uniqueDates(tasksBetweenDates(events, week[0], week[1]))">
@@ -164,13 +219,10 @@
 
                         </template>
                     </div>
-
-
                 </template>
             </div>
         </template>
 
-        {% include "agenda/top-navigation.html" %}
         {% include "agenda/bottom-navigation.html" %}
 
     </div>
