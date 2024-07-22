@@ -10,7 +10,7 @@ def agenda_view(request):
 
 
 def new_event_view(request):
-    return ""
+    return render(request, 'agenda/new-event.html')
 
 
 def event_list_json(request):
