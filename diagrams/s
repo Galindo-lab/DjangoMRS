@@ -1,0 +1,95 @@
+@startuml
+!theme plain
+skinparam ArrowThickness 3
+skinparam linetype polyline
+
+entity Agenda {
+  + addCalendar(c: Calendar)
+  + getCalendar(): Calendar
+  + addTask(t: Task)
+  + getTasks(): List<Task>
+  + addNote(n: Note)
+  + getNotes(): List<Note>
+  + addContact(c: Contact)
+  + getContacts(): List<Contact>
+  + addEvent(e: Event)
+  + getEvents(): List<Event>
+  + addReminder(r: Reminder)
+  + getReminders(): List<Reminder>
+}
+
+entity Calendar {
+  - events: List<Event>
+  + addEvent(e: Event)
+  + getEvents(): List<Event>
+  + updateEvent(e: Event)
+  + deleteEvent(e: Event)
+}
+
+entity Task {
+  - title: String
+  - description: String
+  - dueDate: Date
+  - completed: Boolean
+  + createTask(title: String, description: String, dueDate: Date)
+  + readTask(): Task
+  + updateTask(t: Task)
+  + deleteTask()
+}
+
+entity Note {
+  - title: String
+  - content: String
+  + createNote(title: String, content: String)
+  + readNote(): Note
+  + updateNote(n: Note)
+  + deleteNote()
+}
+
+entity Contact {
+  - name: String
+  - phone: String
+  - email: String
+  + createContact(name: String, phone: String, email: String)
+  + readContact(): Contact
+  + updateContact(c: Contact)
+  + deleteContact()
+}
+
+entity Event {
+  - title: String
+  - description: String
+  - date: Date
+  - startTime: DateTime
+  - endTime: DateTime
+  - contacts: List<Contact>
+  - reminders: List<Reminder>
+  + createEvent(title: String, description: String, date: Date, startTime: DateTime, endTime: DateTime)
+  + readEvent(): Event
+  + updateEvent(e: Event)
+  + deleteEvent()
+}
+
+entity Reminder {
+  - message: String
+  - dateTime: DateTime
+  + createReminder(message: String, dateTime: DateTime)
+  + readReminder(): Reminder
+  + updateReminder(r: Reminder)
+  + deleteReminder()
+}
+
+' Relaciones y cardinalidades
+Agenda ||--|| Calendar : "manages"
+Agenda ||--o{ Task : "manages"
+Agenda ||--o{ Note : "manages"
+Agenda ||--o{ Contact : "manages"
+Agenda ||--o{ Event : "manages"
+Agenda ||--o{ Reminder : "manages"
+
+Calendar ||--o{ Event : "contains"
+Event ||--o{ Reminder : "has"
+Task ||--o{ Note : "includes"
+Event ||--o{ Contact : "involves"
+Task ||--o{ Contact : "involves"
+@enduml
