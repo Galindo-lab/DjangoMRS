@@ -123,7 +123,10 @@
     <div class="container" style="padding-top: 2.5rem; padding-bottom: 4.5rem;" x-data="agendaApp">
         <template x-for="(month, index) in getMonthNames(locale)">
             <div class="row">
-                <span class="fs-4 mt-4 text-capitalize" x-text="month"></span>
+                <div class="pt-5 pb-2 mb-3 border-bottom">
+                    <span class="fs-4 text-capitalize fw-light" x-text="month"></span>
+                </div>
+
 
                 <template x-for="(week, index) in getWeeksInMonth(today.getFullYear(), index)">
                     <div>
@@ -145,7 +148,7 @@
                                 <div class="col">
                                     {# Tarea #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
-                                        <div class="col my-2 px-2 py-1 bg-primary text-white rounded">
+                                        <div class="col my-2 px-2 py-1 border rounded">
                                             <div class="fw-medium" x-text="task.name"></div>
                                             <div class="small" x-text="formatTimeRange(task.start, task.end)"></div>
                                         </div>
