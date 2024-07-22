@@ -3,8 +3,8 @@
 
 
 {% block nav %}
-    <a class="navbar-brand fw-light" href="#">
-        <i class="bi bi-arrow-left"></i>
+    <a class="navbar-brand fw-light" href="{% url 'index' %}">
+        <i class="bi bi-x-lg"></i>
     </a>
 
 
@@ -13,5 +13,8 @@
 
 {# Lista de eventos #}
 {% block main %}
-    <h1>Hola</h1>
+
+    <div class="container col-md-7" x-data="agendaApp">
+        <h1>Hola</h1>
+    </div>
 {% endblock %}
