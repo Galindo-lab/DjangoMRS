@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block script %}
-
     <script id="events">
         [
             {
@@ -67,7 +66,6 @@
             }
         ]
     </script>
-
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('agendaApp', () => ({
@@ -120,13 +118,17 @@
 {% endblock %}
 
 {% block main %}
-    <div class="container" style="padding-top: 2.5rem; padding-bottom: 4.5rem;" x-data="agendaApp">
+
+
+
+    {# Lista de eventos #}
+    <div class="container col-md-7" style="padding-top: 2.5rem; padding-bottom: 4.5rem;" x-data="agendaApp">
         <template x-for="(month, index) in getMonthNames(locale)">
             <div class="row">
+                {# Mes #}
                 <div class="pt-5 pb-2 mb-3 border-bottom">
-                    <span class="fs-4 text-capitalize fw-light" x-text="month"></span>
+                    <span class="fs-4 text-capitalize" x-text="month"></span>
                 </div>
-
 
                 <template x-for="(week, index) in getWeeksInMonth(today.getFullYear(), index)">
                     <div>
@@ -146,12 +148,14 @@
                                 </div>
 
                                 <div class="col">
-                                    {# Tarea #}
+                                    {# Tareas #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
-                                        <a href="#" class="text-decoration-none">
-                                            <div class="col my-2 px-2 py-1 border rounded">
-                                                <div class="fw-medium" x-text="task.name"></div>
-                                                <div class="small" x-text="formatTimeRange(task.start, task.end)"></div>
+                                        <a href="#" class="col btn btn-sm bg-body-secondary w-100 my-2">
+                                            <div class="text-start">
+                                                <span class="text-body fw-medium" x-text="task.name"></span>
+                                                <br>
+                                                <span class="small"
+                                                      x-text="formatTimeRange(task.start, task.end)"></span>
                                             </div>
                                         </a>
                                     </template>
@@ -165,5 +169,9 @@
                 </template>
             </div>
         </template>
+
+        {% include "agenda/top-navigation.html" %}
+        {% include "agenda/bottom-navigation.html" %}
+
     </div>
 {% endblock %}
