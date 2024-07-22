@@ -2,20 +2,163 @@
 {% load static %}
 
 {% block script %}
+
+    <script id="events">
+        [
+            {
+                "name": "Ir al fútbol",
+                "start": "2024-01-10T14:00:00.000Z",
+                "end": "2024-01-10T16:00:00.000Z"
+            },
+            {
+                "name": "Ir al gym",
+                "start": "2024-02-11T07:00:00.000Z",
+                "end": "2024-02-11T08:00:00.000Z"
+            },
+            {
+                "name": "Reunión de trabajo",
+                "start": "2024-01-10T10:00:00.000Z",
+                "end": "2024-01-10T12:00:00.000Z"
+            },
+            {
+                "name": "Cena con amigos",
+                "start": "2024-01-10T19:00:00.000Z",
+                "end": "2024-01-10T21:00:00.000Z"
+            },
+            {
+                "name": "Clase de yoga",
+                "start": "2024-02-11T09:00:00.000Z",
+                "end": "2024-02-11T10:00:00.000Z"
+            },
+            {
+                "name": "Llamada con el cliente",
+                "start": "2024-02-11T11:00:00.000Z",
+                "end": "2024-02-11T11:30:00.000Z"
+            },
+            {
+                "name": "Visita al médico",
+                "start": "2024-02-11T14:00:00.000Z",
+                "end": "2024-02-11T15:00:00.000Z"
+            },
+            {
+                "name": "Compras en el supermercado",
+                "start": "2024-01-15T16:00:00.000Z",
+                "end": "2024-01-15T17:00:00.000Z"
+            },
+            {
+                "name": "Cita en el dentista",
+                "start": "2024-01-20T10:00:00.000Z",
+                "end": "2024-01-20T11:00:00.000Z"
+            },
+            {
+                "name": "Caminata en el parque",
+                "start": "2024-01-20T12:00:00.000Z",
+                "end": "2024-01-20T13:00:00.000Z"
+            },
+            {
+                "name": "Junta de proyectos",
+                "start": "2024-01-25T09:00:00.000Z",
+                "end": "2024-01-25T10:00:00.000Z"
+            },
+            {
+                "name": "Almuerzo con colegas",
+                "start": "2024-01-25T13:00:00.000Z",
+                "end": "2024-01-25T14:00:00.000Z"
+            }
+        ]
+    </script>
+
     <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('calendarApp', () => ({
-            shortDayNames: ["Dom.", "Lun.", "Mar.", "Mie.", "Jue.", "Vie.", "Sab."],
-            shortMonthNames: ["ene.", "feb.", "mar.", "abr.", "may.", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."],
-            month: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-        }));
-    });
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('agendaApp', () => ({
+                locale: 'es-mx',
+                today: new Date(),
+                events: [],
+                init() {
+                    this.events = JSON.parse(document.getElementById('events').textContent) || [];
+                },
+                formatWeekday(locale, date, format) {
+                    const weekdayFormatter = new Intl.DateTimeFormat(locale, {weekday: format});
+                    return weekdayFormatter.format(date)
+                },
+                tasksBetweenDates(events, startDate, endDate) {
+                    return events.filter(task => {
+                        const taskStart = new Date(task.start);
+                        const taskEnd = new Date(task.end);
+                        return (taskStart >= startDate && taskStart <= endDate)
+                            || (taskEnd >= startDate && taskEnd <= endDate)
+                            || (taskStart <= startDate && taskEnd >= endDate);
+                    });
+                },
+                uniqueDates(tasks) {
+                    const dates = new Set();
+                    tasks.forEach(task => {
+                        dates.add(new Date(task.start).toISOString().split('T')[0]);
+                        dates.add(new Date(task.end).toISOString().split('T')[0]);
+                    });
+                    return Array.from(dates).map(date => new Date(date)).sort((a, b) => a - b);
+                },
+                getTasksForDate(events, date) {
+                    const targetDate = date.toISOString().split('T')[0];
+                    return events.filter(task => {
+                        const taskStart = new Date(task.start).toISOString().split('T')[0];
+                        const taskEnd = new Date(task.end).toISOString().split('T')[0];
+                        return taskStart === targetDate || taskEnd === targetDate;
+                    });
+                },
+                formatTimeRange(start, end) {
+                    const formatTime = date => {
+                        const hours = date.getUTCHours() % 12 || 12;
+                        const ampm = date.getUTCHours() >= 12 ? 'p.m.' : 'a.m.';
+                        return `${hours} ${ampm}`;
+                    };
+                    return `${formatTime(new Date(start))} - ${formatTime(new Date(end))}`;
+                }
+            }));
+        });
     </script>
 {% endblock %}
 
 {% block main %}
-	<div class="container-flex">
+    <div class="container" style="padding-top: 2.5rem; padding-bottom: 4.5rem;" x-data="agendaApp">
+        <template x-for="(month, index) in getMonthNames(locale)">
+            <div class="row">
+                <span class="fs-4 mt-4 text-capitalize" x-text="month"></span>
 
+                <template x-for="(week, index) in getWeeksInMonth(today.getFullYear(), index)">
+                    <div>
+                        {# Semana #}
+                        <div class="my-1">
+                            <span class="text-secondary small"
+                                  x-text="formatDateRange(week[0], week[1], locale)"></span>
+                        </div>
+
+                        <template x-for="eventDate in uniqueDates(tasksBetweenDates(events, week[0], week[1]))">
+
+                            <div class="row mb-2 py-1">
+                                {# dia #}
+                                <div class="col-2 text-center my-1">
+                                    <div x-text="formatWeekday(locale, eventDate, 'short')"></div>
+                                    <div class="fs-4" x-text="eventDate.getDate()"></div>
+                                </div>
+
+                                <div class="col">
+                                    {# Tarea #}
+                                    <template x-for="task in getTasksForDate(events, eventDate)">
+                                        <div class="col my-2 px-2 py-1 bg-primary text-white rounded">
+                                            <div class="fw-medium" x-text="task.name"></div>
+                                            <div class="small" x-text="formatTimeRange(task.start, task.end)"></div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                        </template>
+                    </div>
+
+
+                </template>
+            </div>
+        </template>
     </div>
 {% endblock %}
-
