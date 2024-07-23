@@ -18,11 +18,11 @@ class Contact(models.Model):
 
 
 class RepeatChoices(models.TextChoices):
-    NO_REPEAT = 'NR', 'Does not repeat'
-    DAILY = 'DA', 'Daily'
-    WEEKLY = 'WE', 'Weekly'
-    MONTHLY = 'MO', 'Monthly'
-    YEARLY = 'YE', 'Yearly'
+    NO_REPEAT = 'NR', 'Nunca'
+    DAILY = 'DA', 'Diariamente'
+    WEEKLY = 'WE', 'Semanalmente'
+    MONTHLY = 'MO', 'Mensualmente'
+    YEARLY = 'YE', 'Anualmente'
 
 
 class Event(models.Model):
