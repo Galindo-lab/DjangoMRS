@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 
-# from agenda.form import ActivityForm
+from agenda.form import EventForm
 from agenda.models import *
 
 
@@ -9,8 +9,14 @@ def agenda_view(request):
     return render(request, 'agenda/agenda.html')
 
 
-def new_event_view(request):
-    return render(request, 'agenda/new-event.html')
+def event_view(request):
+    return render(
+        request=request,
+        template_name='agenda/event.html',
+        context={
+            'EventForm': EventForm()
+        }
+    )
 
 
 def event_list_json(request):
