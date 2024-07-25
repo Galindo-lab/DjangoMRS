@@ -1,12 +1,9 @@
 from django import forms
-from .models import Activity
 
-"""class ActivityForm(forms.ModelForm):
+from .models import Event
+
+
+class ActivityForm(forms.ModelForm):
     class Meta:
-        model = Activity
-        fields = ['name', 'start', 'end']
-        widgets = {
-            'start': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'end': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        }
-"""
+        model = Event
+        fields = ['title', 'start_time', 'end_time', 'repeat', 'all_days']
