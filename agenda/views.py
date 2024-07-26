@@ -17,9 +17,6 @@ class EventView(FormView):
     form_class = EventForm
 
     def form_valid(self, form):
-        # Aquí puedes agregar la lógica para manejar el formulario cuando es válido
-        # form.agenda = get_object_or_404(Agenda, user=self.request.user)
-
         obj = form.save(commit=False)
         obj.agenda = get_object_or_404(Agenda, user=self.request.user.agenda)
         obj.save()
