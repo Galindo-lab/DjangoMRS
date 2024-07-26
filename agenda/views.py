@@ -7,6 +7,9 @@ from agenda.form import EventForm
 from agenda.models import *
 
 
+def event_list_json(request):
+    return JsonResponse(list(Event.objects.values()), safe=False)
+
 def agenda_view(request):
     return render(request, 'agenda/agenda.html')
 
@@ -27,8 +30,7 @@ class EventView(FormView):
 event_view = EventView.as_view()
 
 
-def event_list_json(request):
-    return JsonResponse(list(Event.objects.values()), safe=False)
+
 
 
 # Create your views here.
