@@ -9,7 +9,7 @@
     </a>
 
     <div class="d-flex align-items-center">
-        <label class="btn btn-primary"><i class="bi bi-check2"></i></label>
+        <label class="btn btn-primary" for="SubmitButton"><i class="bi bi-check2"></i></label>
     </div>
 {% endblock %}
 
@@ -17,14 +17,28 @@
 {# Lista de eventos #}
 {% block main %}
     <div class="container pt-3 col-md-7">
-        <form>
+
+        <ul class="list-group mb-4">
+            {% for field, error_list in form.errors.items %}
+                {% for error in error_list %}
+                    <li class="list-group-item list-group-item-danger">
+                        <i class="bi bi-exclamation-circle"></i> {{ error }}
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-4 col-form-label fw-medium">
                     Titulo
                 </label>
                 <div class="col-8 d-flex flex-row-reverse bd">
                     <div class="input-group input-group">
-                        {% render_field EventForm.title placeholder="Agregar título..." type="text" class="form-control" %}
+                        {% render_field form.title placeholder="Agregar título..." type="text" class="form-control" %}
                     </div>
                 </div>
             </div>
@@ -35,7 +49,7 @@
                 </label>
                 <div class="col-8 d-flex flex-row-reverse bd">
                     <div class="form-check form-switch">
-                        {% render_field EventForm.all_day type="checkbox" class="form-check-input" role="switch" id="flexSwitchCheckDefault" %}
+                        {% render_field form.all_day type="checkbox" class="form-check-input" role="switch" id="flexSwitchCheckDefault" %}
                     </div>
                 </div>
             </div>
@@ -43,23 +57,25 @@
             <div class="row mb-3">
                 <label for="inputEmail3" class="col-4 col-form-label fw-medium">Inicio</label>
                 <div class="col-8 ">
-                    {% render_field EventForm.start_time type="datetime-local" value="2018-06-12T19:30" class="form-control" %}
+                    {% render_field form.start_time type="datetime-local" value="2018-06-12T19:30" class="form-control" %}
                 </div>
             </div>
 
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-4 col-form-label fw-medium">Fin</label>
                 <div class="col-8">
-                    {% render_field EventForm.end_time type="datetime-local" value="2018-06-12T19:30" class="form-control" %}
+                    {% render_field form.end_time type="datetime-local" value="2018-06-12T19:30" class="form-control" %}
                 </div>
             </div>
 
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-4 col-form-label fw-medium">Repetición</label>
                 <div class="col-8">
-                    {% render_field EventForm.repeat class="form-select form-select bg-tertiary" %}
+                    {% render_field form.repeat class="form-select form-select bg-tertiary" %}
                 </div>
             </div>
+
+            <input class="invisible" type="submit" id="SubmitButton">
         </form>
     </div>
 {% endblock %}

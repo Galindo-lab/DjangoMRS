@@ -1,5 +1,7 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import FormView
 
 from agenda.form import EventForm
 from agenda.models import *
@@ -9,14 +11,23 @@ def agenda_view(request):
     return render(request, 'agenda/agenda.html')
 
 
-def event_view(request):
-    return render(
-        request=request,
-        template_name='agenda/event.html',
-        context={
-            'EventForm': EventForm()
-        }
-    )
+class EventView(FormView):
+    template_name = 'agenda/event.html'
+    success_url = reverse_lazy('index')
+    form_class = EventForm
+
+    def form_valid(self, form):
+        # Aquí puedes agregar la lógica para manejar el formulario cuando es válido
+        # form.agenda = get_object_or_404(Agenda, user=self.request.user)
+
+        obj = form.save(commit=False)
+        obj.agenda = get_object_or_404(Agenda, user=self.request.user.agenda)
+        obj.save()
+
+        return super().form_valid(form)
+
+
+event_view = EventView.as_view()
 
 
 def event_list_json(request):

@@ -1,16 +1,22 @@
 from django.contrib import admin
-
-from .models import Contact, Event, Agenda
+from .models import Agenda, Contact, Event
 
 
 class ContactInline(admin.TabularInline):
-    model = Agenda.contacts.through
+    model = Contact
     extra = 0
 
 
-class EventInline(admin.TabularInline):
-    model = Agenda.events.through
+class EventInline(admin.StackedInline):
+    model = Event
     extra = 0
+
+
+class AgendaAdmin(admin.ModelAdmin):
+    inlines = [ContactInline, EventInline]
+    list_display = ('user',)
+    search_fields = ('user__username',)
+    list_filter = ('user',)
 
 
 class EventContactInline(admin.TabularInline):
@@ -18,16 +24,13 @@ class EventContactInline(admin.TabularInline):
     extra = 0
 
 
-class AgendaAdmin(admin.ModelAdmin):
-    inlines = [ContactInline, EventInline]
-    exclude = ('notes', 'contacts', 'events')
-
-
 class EventAdmin(admin.ModelAdmin):
     inlines = [EventContactInline]
-    exclude = ('contacts',)
+    list_display = ('title', 'start_time', 'end_time', 'agenda')
+    search_fields = ('title',)
+    list_filter = ('start_time', 'end_time', 'agenda')
 
 
+admin.site.register(Agenda, AgendaAdmin)
 admin.site.register(Contact)
 admin.site.register(Event, EventAdmin)
-admin.site.register(Agenda, AgendaAdmin)
