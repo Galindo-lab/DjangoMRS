@@ -185,7 +185,7 @@
                                 <div class="col">
                                     {# Tareas #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
-                                        <a href="#" class="col btn btn-sm bg-body-secondary w-100 my-2">
+                                        <a x-bind:href="'event'+ '/' + task.pk" class="col btn btn-sm bg-body-secondary w-100 my-2">
                                             <div class="text-start">
                                                 <span class="text-body fw-medium" x-text="task.title"></span>
                                                 <br>

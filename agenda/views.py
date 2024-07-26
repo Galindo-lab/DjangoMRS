@@ -1,14 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 
 from agenda.form import EventForm
 from agenda.models import *
-
-
-def event_list_json(request):
-    return JsonResponse(list(Event.objects.values()), safe=False)
 
 
 def agenda_view(request):
@@ -19,6 +15,16 @@ def agenda_view(request):
             "eventos": [a.to_dict() for a in Event.objects.all()]
         }
     )
+
+
+class EventUpdateView(UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'agenda/event.html'
+    success_url = reverse_lazy('index')  # Change this to your desired URL
+
+
+event_update_view = EventUpdateView.as_view()
 
 
 class EventView(FormView):

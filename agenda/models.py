@@ -51,6 +51,7 @@ class Event(models.Model):
 
     def to_dict(self):
         return {
+            'pk': self.pk,
             'title': self.title,
             'start': self.start_time,
             'end': self.end_time
