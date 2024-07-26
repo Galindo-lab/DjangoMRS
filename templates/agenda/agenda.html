@@ -177,12 +177,12 @@
 
                             <div class="row mb-2 py-1">
                                 {# dia #}
-                                <div class="col-2 text-center my-1">
+                                <div class="col-2 text-center my-1 col-md-1 mx-md-3">
                                     <div x-text="formatWeekday(locale, eventDate, 'short')"></div>
                                     <div class="fs-4" x-text="eventDate.getDate()"></div>
                                 </div>
 
-                                <div class="col">
+                                <div class="col ps-0">
                                     {# Tareas #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
                                         <a x-bind:href="'event'+ '/' + task.pk" class="col btn btn-sm bg-body-secondary w-100 my-2">

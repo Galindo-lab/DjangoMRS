@@ -8,6 +8,8 @@
         <i class="bi bi-x-lg"></i>
     </a>
 
+    Evento
+
     <div class="d-flex align-items-center">
         <label class="btn btn-primary" for="SubmitButton"><i class="bi bi-check2"></i></label>
     </div>
@@ -16,7 +18,7 @@
 
 {# Lista de eventos #}
 {% block main %}
-    <div class="container pt-3 col-md-7">
+    <div class="container col-md-7">
 
         <ul class="list-group mb-4">
             {% for field, error_list in form.errors.items %}
