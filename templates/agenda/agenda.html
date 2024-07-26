@@ -2,82 +2,20 @@
 {% load static %}
 
 {% block script %}
-    <script id="events">
-        [
-            {
-                "name": "Ir al fútbol",
-                "start": "2024-01-10T14:00:00.000Z",
-                "end": "2024-01-10T16:00:00.000Z"
-            },
-            {
-                "name": "Ir al gym",
-                "start": "2024-02-11T07:00:00.000Z",
-                "end": "2024-02-11T08:00:00.000Z"
-            },
-            {
-                "name": "Reunión de trabajo",
-                "start": "2024-01-10T10:00:00.000Z",
-                "end": "2024-01-10T12:00:00.000Z"
-            },
-            {
-                "name": "Cena con amigos",
-                "start": "2024-01-10T19:00:00.000Z",
-                "end": "2024-01-10T21:00:00.000Z"
-            },
-            {
-                "name": "Clase de yoga",
-                "start": "2024-02-11T09:00:00.000Z",
-                "end": "2024-02-11T10:00:00.000Z"
-            },
-            {
-                "name": "Llamada con el cliente",
-                "start": "2024-02-11T11:00:00.000Z",
-                "end": "2024-02-11T11:30:00.000Z"
-            },
-            {
-                "name": "Visita al médico",
-                "start": "2024-02-11T14:00:00.000Z",
-                "end": "2024-02-11T15:00:00.000Z"
-            },
-            {
-                "name": "Compras en el supermercado",
-                "start": "2024-01-15T16:00:00.000Z",
-                "end": "2024-01-15T17:00:00.000Z"
-            },
-            {
-                "name": "Cita en el dentista",
-                "start": "2024-01-20T10:00:00.000Z",
-                "end": "2024-01-20T11:00:00.000Z"
-            },
-            {
-                "name": "Caminata en el parque",
-                "start": "2024-01-20T12:00:00.000Z",
-                "end": "2024-01-20T13:00:00.000Z"
-            },
-            {
-                "name": "Junta de proyectos",
-                "start": "2024-01-25T09:00:00.000Z",
-                "end": "2024-01-25T10:00:00.000Z"
-            },
-            {
-                "name": "Almuerzo con colegas",
-                "start": "2024-01-25T13:00:00.000Z",
-                "end": "2024-01-25T14:00:00.000Z"
-            }
-        ]
-    </script>
+    {{ eventos|json_script:"events-data" }}
+
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('agendaApp', () => ({
                 locale: 'es-mx',
                 today: new Date(),
                 events: [],
-                init() {
-                    this.events = JSON.parse(document.getElementById('events').textContent) || [];
+                async init() {
+                    this.events = JSON.parse(document.getElementById('events-data').textContent);
                 },
                 formatWeekday(locale = 'en-US', date, format) {
                     const weekdayFormatter = new Intl.DateTimeFormat(locale, {weekday: format});
-                    return weekdayFormatter.format(date)
+                    return weekdayFormatter.format(date);
                 },
                 tasksBetweenDates(events, startDate, endDate) {
                     return events.filter(task => {
@@ -146,6 +84,8 @@
                 }
             }));
         });
+    </script>
+
     </script>
 {% endblock %}
 
@@ -247,7 +187,7 @@
                                     <template x-for="task in getTasksForDate(events, eventDate)">
                                         <a href="#" class="col btn btn-sm bg-body-secondary w-100 my-2">
                                             <div class="text-start">
-                                                <span class="text-body fw-medium" x-text="task.name"></span>
+                                                <span class="text-body fw-medium" x-text="task.title"></span>
                                                 <br>
                                                 <span class="small"
                                                       x-text="formatTimeRange(task.start, task.end)"></span>

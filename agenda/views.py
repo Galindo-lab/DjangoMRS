@@ -10,8 +10,15 @@ from agenda.models import *
 def event_list_json(request):
     return JsonResponse(list(Event.objects.values()), safe=False)
 
+
 def agenda_view(request):
-    return render(request, 'agenda/agenda.html')
+    return render(
+        request=request,
+        template_name='agenda/agenda.html',
+        context={
+            "eventos": [a.to_dict() for a in Event.objects.all()]
+        }
+    )
 
 
 class EventView(FormView):
@@ -21,16 +28,13 @@ class EventView(FormView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.agenda = get_object_or_404(Agenda, user=self.request.user.agenda)
+        obj.agenda = get_object_or_404(Agenda, user=self.request.user)
         obj.save()
 
         return super().form_valid(form)
 
 
 event_view = EventView.as_view()
-
-
-
 
 
 # Create your views here.
