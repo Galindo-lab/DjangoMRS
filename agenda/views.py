@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.timezone import now
@@ -21,6 +22,24 @@ class PendingView(LoginRequiredMixin, View):
                 "eventos": [a.to_dict() for a in Event.filter_by_year(current_year)]
             }
         )
+
+    def post(self, request):
+        form = SelectDate(request.POST)
+
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            year = date.year
+
+            return render(
+                request=request,
+                template_name='agenda/agenda.html',
+                context={
+                    "selectDate": SelectDate(),
+                    "eventos": [a.to_dict() for a in Event.filter_by_year(year)]
+                }
+            )
+
+
 
 
 pending_view = PendingView.as_view()
