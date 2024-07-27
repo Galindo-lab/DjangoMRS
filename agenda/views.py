@@ -1,22 +1,27 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.utils.timezone import now
 from django.views import View
 from django.views.generic import FormView, UpdateView
 
-from agenda.form import EventForm
+from agenda.form import EventForm, SelectDate
 from agenda.models import *
 
 
 class PendingView(LoginRequiredMixin, View):
     def get(self, request):
+        current_year = now().year
+
         return render(
             request=request,
             template_name='agenda/agenda.html',
             context={
-                "eventos": [a.to_dict() for a in Event.objects.all()]
+                "selectDate": SelectDate(),
+                "eventos": [a.to_dict() for a in Event.filter_by_year(current_year)]
             }
         )
+
 
 pending_view = PendingView.as_view()
 
@@ -31,18 +36,8 @@ class AgendaDay(LoginRequiredMixin, View):
             }
         )
 
+
 agenda_day_view = AgendaDay.as_view()
-
-
-
-
-
-
-
-
-
-
-
 
 
 class EventUpdateView(LoginRequiredMixin, UpdateView):

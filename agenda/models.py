@@ -1,9 +1,7 @@
-import datetime
 import json
 
 from django.contrib.auth.models import User
 from django.db import models
-
 
 
 class Agenda(models.Model):
@@ -52,6 +50,18 @@ class Event(models.Model):
     contacts = models.ManyToManyField('Contact', related_name='events', blank=True)
     repeat = models.CharField(default=RepeatChoices.NO_REPEAT, choices=RepeatChoices.choices, max_length=2)
     all_day = models.BooleanField(default=False)
+
+    @classmethod
+    def filter_by_year(cls, year):
+        return cls.objects.filter(start_time__year=year)
+
+    @classmethod
+    def filter_by_month(cls, year, month):
+        return cls.objects.filter(start_time__year=year, start_time__month=month)
+
+    @classmethod
+    def filter_by_day(cls, year, month, day):
+        return cls.objects.filter(start_time__year=year, start_time__month=month, start_time__day=day)
 
     def to_dict(self):
         return {

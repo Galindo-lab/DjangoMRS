@@ -1,5 +1,6 @@
 {% extends 'agenda/base-nav.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block script %}
     {{ eventos|json_script:"events-data" }}
@@ -136,7 +137,7 @@
                     <span class="modal-title text-center" id="staticBackdropLabel">Modal title</span>
                 </div>
                 <div class="modal-body">
-                    ...
+                    {% render_field selectDate.date type="date" class="form-control" %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -176,7 +177,8 @@
                                 <div class="col ps-0">
                                     {# Tareas #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
-                                        <a x-bind:href="'/event/'+task.pk" class="col btn btn-sm bg-body-secondary w-100 my-2">
+                                        <a x-bind:href="'/event/'+task.pk"
+                                           class="col btn btn-sm bg-body-secondary w-100 my-2">
                                             <div class="text-start">
                                                 <span class="text-body fw-medium" x-text="task.title"></span>
                                                 <br>
