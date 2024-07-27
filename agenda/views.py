@@ -21,6 +21,30 @@ class PendingView(LoginRequiredMixin, View):
 pending_view = PendingView.as_view()
 
 
+class AgendaDay(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(
+            request=request,
+            template_name='agenda/agenda_dia.html',
+            context={
+                "eventos": [a.to_dict() for a in Event.objects.all()]
+            }
+        )
+
+agenda_day_view = AgendaDay.as_view()
+
+
+
+
+
+
+
+
+
+
+
+
+
 class EventUpdateView(LoginRequiredMixin, UpdateView):
     model = Event
     form_class = EventForm

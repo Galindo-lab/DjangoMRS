@@ -1,7 +1,60 @@
 {% extends 'agenda/base-nav.html' %}
 {% load static %}
 
+
+{% block script %}
+    {{ eventos|json_script:"events-data" }}
+
+        <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('agendaApp', () => ({
+                locale: 'es-mx',
+                today: new Date(),
+                events: [],
+            }));
+        });
+{% endblock %}
+
+
+
+{% block nav %}
+    <a class="navbar-brand fw-light" href="#" x-data="agendaApp">
+        <span class="align-middle"></span>
+    </a>
+
+    <div class="d-flex align-items-center">
+        {# Calendar #}
+        <a class="btn btn-large" href="">
+            <i class="bi bi-calendar-day"></i>
+        </a>
+
+        {# Dropdown #}
+        <div class="flex-shrink-0 dropdown">
+            <a href="#" class="d-block btn" data-bs-toggle="dropdown" aria-expanded="true">
+                <i class="bi bi-three-dots-vertical"></i>
+            </a>
+            <ul class="dropdown-menu text-small shadow-sm"
+                style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 34px, 0px);"
+                data-popper-placement="bottom-end">
+
+
+                <li class="dropdown-item py-2 " data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ir a</li>
+                <li><a class="dropdown-item py-2" href="#">Ajustes</a></li>
+
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
 {% block main %}
     <div class="container col-md-7" x-data="agendaApp">
+
+
+
+
+
+
+
+        {% include "agenda/bottom-navigation.html" %}
     </div>
 {% endblock %}
