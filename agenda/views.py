@@ -31,7 +31,7 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
 event_update_view = EventUpdateView.as_view()
 
 
-class EventView(LoginRequiredMixin, FormView):
+class EventCreateView(LoginRequiredMixin, FormView):
     template_name = 'agenda/event.html'
     success_url = reverse_lazy('index')
     form_class = EventForm
@@ -44,4 +44,4 @@ class EventView(LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
 
-event_view = EventView.as_view()
+event_view = EventCreateView.as_view()
