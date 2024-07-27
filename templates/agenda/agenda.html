@@ -12,6 +12,7 @@
                 events: [],
                 async init() {
                     this.events = JSON.parse(document.getElementById('events-data').textContent);
+                    this.today = new Date(this.events[0].start)
                 },
                 formatWeekday(locale = 'en-US', date, format) {
                     const weekdayFormatter = new Intl.DateTimeFormat(locale, {weekday: format});
@@ -85,7 +86,6 @@
             }));
         });
     </script>
-
     </script>
 {% endblock %}
 
@@ -146,6 +146,8 @@
         </div>
     </div>
 
+
+
     <div class="container col-md-7" x-data="agendaApp">
         <template x-for="(month, index) in getMonthNames(locale)">
             <div class="row">
@@ -174,7 +176,7 @@
                                 <div class="col ps-0">
                                     {# Tareas #}
                                     <template x-for="task in getTasksForDate(events, eventDate)">
-                                        <a x-bind:href="'event'+ '/' + task.pk" class="col btn btn-sm bg-body-secondary w-100 my-2">
+                                        <a x-bind:href="'/event/'+task.pk" class="col btn btn-sm bg-body-secondary w-100 my-2">
                                             <div class="text-start">
                                                 <span class="text-body fw-medium" x-text="task.title"></span>
                                                 <br>

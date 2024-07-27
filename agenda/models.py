@@ -41,6 +41,10 @@ class Event(models.Model):
     """
     Represents an event in the calendar.
     """
+
+    class Meta:
+        ordering = ['start_time']
+
     agenda = models.ForeignKey(Agenda, related_name='events', on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=False)
     start_time = models.DateTimeField()

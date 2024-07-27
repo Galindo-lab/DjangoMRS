@@ -12,7 +12,7 @@ urlpatterns = [
     path(route='agenda/day', name='agenda-day', view=agenda_day_view),
 
     path(route='event/new', name='new-event', view=event_view),
-    path(route='event/<int:pk>', name='new-event', view=event_update_view),
+    path(route='event/<int:pk>', name='event', view=event_update_view),
 
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT})
 ]
