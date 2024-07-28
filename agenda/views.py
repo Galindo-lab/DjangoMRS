@@ -41,7 +41,6 @@ class PendingView(LoginRequiredMixin, View):
 
 
 
-
 pending_view = PendingView.as_view()
 
 
